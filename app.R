@@ -1,0 +1,108 @@
+# name
+projectName = "爱家信用分"
+# library
+library(shiny)
+library(shinydashboard)
+library(DT)
+library(dplyr)
+library(readxl)
+library(writexl)
+library(stringr)
+library(shinyjs)
+# source
+source(file="env.R")
+source(file="func.R")
+source(file="./data/help.R")
+source(file="./data/clean.R")
+source(file="./data/calculate.R")
+source(file = "./analysis/plot.R")
+source(file = "./analysis/overview.R")
+source(file = "./analysis/base.R")
+source(file = "./analysis/business.R")
+source(file = "./argument/overview.R")
+source(file = "./argument/plot.R")
+source(file = "./argument/base.R")
+source(file = "./argument/attenuation.R")
+source(file = "./argument/behavior.R")
+source(file = "./argument/business.R")
+source(file = "./compare/plot.R")
+source(file = "./compare/trend.R")
+source(file = "./compare/jjr.R")
+# body
+sidebar <- dashboardSidebar(
+    sidebarMenu(
+        menuItem("参数比较", tabName = "argument", icon = icon("th"),
+                # menuSubItem("信用分",tabName="arg_overview"),
+                menuSubItem("衰减算法",tabName="arg_attenuation"),
+                menuSubItem("基础素质",tabName="arg_base"),
+                # menuSubItem("行为规范",tabName="arg_behavior"),
+                # menuSubItem("品质服务",tabName="arg_service"),
+                # menuSubItem("参与贡献",tabName="arg_contribute"),
+                menuSubItem("业务能力",tabName="arg_business")
+            ),
+        menuItem("数据分析", tabName = "analysis", icon = icon("th"),startExpanded=TRUE,
+                menuSubItem("信用分",tabName="ana_overview",selected=TRUE),
+                menuSubItem("基础素质",tabName="ana_base"),
+                # menuSubItem("行为规范",tabName="ana_behavior"),
+                # menuSubItem("品质服务",tabName="ana_service"),
+                # menuSubItem("参与贡献",tabName="ana_contribute"),
+                menuSubItem("业务能力",tabName="ana_business")
+            ),
+        menuItem("对比分析", tabName = "compare", icon = icon("th"),
+                menuSubItem("趋势对比",tabName="comp_trend"),
+                menuSubItem("经纪人对比",tabName="comp_jjr"),
+                menuSubItem("自定义",tabName="comp_custom")
+            )                  
+        )
+)
+
+body <- dashboardBody(
+    tags$head(tags$style("section.content { overflow-y: hidden; }")),
+    tabItems(
+        # #----------------------
+        # # 参数设置
+        arg_overview_UI(),
+        arg_base_UI(),
+        arg_behavior_UI(),
+        arg_business_UI(),
+        arg_attenuation_UI(),
+        # # #----------------------
+        # # # 数据分析
+        ana_overview_UI(),
+        ana_business_UI(),
+        ana_base_UI(),
+        #----------------------
+        # # 对比分析
+        ana_comp_trend_UI(),
+        ana_comp_jjr_UI()
+        )
+)
+
+# Define server 
+server <- function(input, output,session) {
+    #----------------------
+    # # 参数设置
+    arg_overview_Server()
+    arg_base_Server()
+    arg_behavior_Server()
+    arg_business_Server()
+    arg_attenuation_Server()
+    # #----------------------
+    # # # 数据分析
+    ana_overview_Server()
+    ana_business_Server()
+    ana_base_Server()
+    #----------------------
+    # # 对比分析
+    ana_comp_trend_Server()
+    ana_comp_jjr_Server()
+
+
+}
+
+# Define UI 
+ui <- dashboardPage(dashboardHeader(title = projectName),sidebar,body)
+# Run the application 
+shinyApp(ui = ui, server = server)
+
+
