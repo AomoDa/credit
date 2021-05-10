@@ -8,13 +8,14 @@ library(dplyr)
 library(readxl)
 library(writexl)
 library(stringr)
-library(shinyjs)
+library(DT)
 # source
-source(file="env.R")
-source(file="func.R")
-source(file="./data/help.R")
-source(file="./data/clean.R")
-source(file="./data/calculate.R")
+source(file = "env.R")
+source(file = "func.R")
+source(file = "./data/gw.R")
+source(file = "./data/help.R")
+source(file = "./data/clean.R")
+source(file = "./data/calculate.R")
 source(file = "./analysis/plot.R")
 source(file = "./analysis/overview.R")
 source(file = "./analysis/base.R")
@@ -24,7 +25,8 @@ source(file = "./argument/plot.R")
 source(file = "./argument/base.R")
 source(file = "./argument/attenuation.R")
 source(file = "./argument/behavior.R")
-source(file = "./argument/business.R")
+source(file = "./argument/gw.R")
+source(file = "./argument/jili.R")
 source(file = "./compare/plot.R")
 source(file = "./compare/trend.R")
 source(file = "./compare/jjr.R")
@@ -32,13 +34,10 @@ source(file = "./compare/jjr.R")
 sidebar <- dashboardSidebar(
     sidebarMenu(
         menuItem("参数比较", tabName = "argument", icon = icon("th"),
-                # menuSubItem("信用分",tabName="arg_overview"),
                 menuSubItem("衰减算法",tabName="arg_attenuation"),
                 menuSubItem("基础素质",tabName="arg_base"),
-                # menuSubItem("行为规范",tabName="arg_behavior"),
-                # menuSubItem("品质服务",tabName="arg_service"),
-                # menuSubItem("参与贡献",tabName="arg_contribute"),
-                menuSubItem("业务能力",tabName="arg_business")
+                menuSubItem("转化秩",tabName="arg_zhuanhua"),
+                menuSubItem("激励曲线",tabName="arg_jili")
             ),
         menuItem("数据分析", tabName = "analysis", icon = icon("th"),startExpanded=TRUE,
                 menuSubItem("信用分",tabName="ana_overview",selected=TRUE),
@@ -66,6 +65,7 @@ body <- dashboardBody(
         arg_behavior_UI(),
         arg_business_UI(),
         arg_attenuation_UI(),
+        arg_jili_UI(),
         # # #----------------------
         # # # 数据分析
         ana_overview_UI(),
@@ -87,6 +87,7 @@ server <- function(input, output,session) {
     arg_behavior_Server()
     arg_business_Server()
     arg_attenuation_Server()
+    arg_jili_Server()
     # #----------------------
     # # # 数据分析
     ana_overview_Server()

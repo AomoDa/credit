@@ -299,29 +299,15 @@ credit_app_download <- function(dat,now_date,env) {
 }	
 
 # 400接通率
-credit_call_answer <- function(dat,now_date,env){
-	rule = env$business$gw$call_answer
-	# 提取计算周期
-	now_date <- as.Date(now_date)
-	order_date = sort(unique(dat$date))
-	ind_right = which(order_date==now_date)
-	ind_left = ind_right-rule$cal$attenuation+1
-	ind_left = ifelse(ind_left>=1,ind_left,1)
-	cdate = order_date[ind_left:ind_right]
-	cn = length(cdate)
-	# 系数
-	coef_dat = data.frame(date=rev(cdate),coef= rule$cal$coef[1:cn] ) 
-	# 计算
-	dat %>% 
-		filter(date <= now_date) %>%
-		filter(date >= order_date[ind_left]) %>%
-		mutate(s_mon = simple_score_call_answer(call_answer,rule=rule)) %>%
-		inner_join(coef_dat)  %>%
-		group_by(id) %>%
-		summarise(s=sum(s_mon*coef)) %>%
-		mutate(s=if_else(s>=rule$total,rule$total,s)) %>%
-		as.data.frame()	
+credit_call_answer_simple <- function(dat,now_date,env){
+	if(env$business$gw$call_answer$method=="simple"){
+		return(credit_call_answer_simple(dat,now_date,env))
+	}else{
+		return(credit_call_answer_transform(dat,now_date,env))
+	}
+
 }
+
 
 
 # 爱聊1分钟回复

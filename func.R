@@ -12,6 +12,7 @@ entry_transfrom <- function(x,t) {
 	rt = ifelse(rt>0,rt,0)
 	return(rt * env$base$enter$total)
 	}
+
 entry_simple <- Vectorize(FUN=function(x,a) {
 	a=as.numeric(a)
 	rt = x * a 
@@ -160,17 +161,6 @@ simple_score_al_3day <- Vectorize(function(x,rule = env$business$gw$al_3day){
 # 爱聊录入率
 #-------------------------------------------
 
-wilson_al <- function(succ,n) {
-	z = qnorm(0.975)
-	succ = succ + 1
-	n = n + 30 
-	p = log(succ / n +1 )
-	se = sqrt( p * (1-p) + z^2 / (4 * n^2)  )
-	r = ( p  + z^2 / ( 2 * (n+1)) ) / (1 + z^2 / (n+1))
-	return(r)
-}
-
-
 simple_score_al_luru <- Vectorize(function(x,rule = env$business$gw$al_luru){
 	if(is.na(x)){
 		return(0)
@@ -209,8 +199,26 @@ simple_score_al_daikan <- Vectorize(function(x,rule = env$business$gw$al_daikan)
 	}
 },vectorize.args ="x")
 
-
-
+#-------------------------------------------
+# 激励曲线
+#-------------------------------------------
+growS <- Vectorize(function(x,alpha,beta,c_alpha=0.9,c_beta=0.98,intercept=0){
+	a1 = (c_alpha ) / (exp(alpha) - exp(0))
+	b1 = c_alpha - a1 * exp( alpha)
+	a2 = ( c_beta - c_alpha ) / log( beta / alpha )
+	b2 = c_beta - a2 * log( beta )
+	a3 = (1 - c_beta) * 2 
+	b3 = 1 - a3 
+	if (x <= intercept){
+		return(0)
+	} else if(x <= alpha){
+		rlt = a1 * exp(x) + b1 
+	}else if ( x <= beta){
+		rlt = a2 * log(x) + b2
+	}else{
+		rlt = a3 / (1 +exp((beta - x)/ (alpha +beta))) + b3
+	}
+},vectorize.args="x")
 
 
 

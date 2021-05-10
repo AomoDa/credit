@@ -39,37 +39,43 @@ library(writexl)
 library(stringr)
 
 # setwd("Documents/credit/")
-jjrDataPath = "data/积分系统测试所需员工数据5.1.xlsx"
+# jjrDataPath = "data/积分系统测试所需员工数据5.1.xlsx"
+jjrDataPath="data/CreditData.xlsx"
 
 #----------------------------------------------------------------
 # 经纪人过程指标数据
 #----------------------------------------------------------------
 # loading data
 shtFormat <- function(sht){
-	s = unlist(strsplit(x = str_remove_all(sht,"月"),split = "[.]"))
+	s = unlist(strsplit(x = str_remove_all(str_remove_all(string = sht,pattern = " "),"月"),split = "[.]"))
 	rt = paste0(s[1],"-",ifelse(nchar(s[2])==1,paste0("0",s[2]),s[2]),"-01")
 	return(as.Date(rt))
 }
 
 # 读取单个SHEET
 readSheet <- function(sht) {
-	dat = read_xlsx(path = jjrDataPath,sheet = sht,na="无",col_types=c(rep("guess",6),rep("text",28)))
-	# 重命名
-	names(dat) <- c("daqu","qu","zu","id","name","entry_date","exam","nps","jingyan","app_download",
-					"call_answer","al_1min","al_3day","al_luru","al_daikan","xiaoqu",
+	dat = read_xlsx(path = jjrDataPath,sheet = sht,na="无",col_types=c(rep("guess",6),rep("text",39)))
+	names(dat) <- c("daqu","qu","zu","id","name","entry_date",
+					"exam","nps","jingyan","daily","app_download",
+					"call_400","answer_400","call_answer",
+					"cnt_al","cnt_al_1min","al_1min",
+					"dcnt_al","dcnt_al_3day","al_3day",
+					"dcnt_al_2","dcnt_al_luru","al_luru",
+					"dcnt_al_3","dcnt_al_daikan","al_daikan",
+					"xiaoqu",
 					"mm_2","mm_1","mm_sx","mm_zk","mm_csk","mm_cdk","mm_fxz","mm_wt","mm_ys",
 					"zl_cj","zl_1","zl_sfg","zl_cfg","zl_zg","zl_wt","zl_cxz","zl_fxz","zl_pzsk"
-					)
+					)	
 	# 处理数据类型
 	dat$entry_date <- as.Date(dat$entry_date)
-	dat[,c(7:34)] <- as.data.frame(apply(X = dat[,c(7:34)],MARGIN = 2,FUN = as.numeric))
+	dat[,c(7:45)] <- as.data.frame(apply(X = dat[,c(7:45)],MARGIN = 2,FUN = as.numeric))
 	dat$date <- shtFormat(sht)
 	return(as.data.frame(dat))
 }
 
 # 批量读取并合并数据
-readData <- function(path=jjrDataPath) {
-	shts <- excel_sheets(path)
+readData <- function() {
+	shts <- excel_sheets(jjrDataPath)
 	shts <- shts[5:18]
 	dat <- data.frame()
 	for (sht in shts) {
@@ -92,8 +98,7 @@ fill <- function(vec,default=0){
 
 # 读取数据
 kpi.dat = readData()
-kpi.dat[,7:10] <- as.data.frame( apply(X = kpi.dat[,7:10],MARGIN = 2,FUN = fill))
-kpi.dat[,17:34] <- as.data.frame( apply(X = kpi.dat[,17:34],MARGIN = 2,FUN = fill))
+kpi.dat[,7:45] <- as.data.frame( apply(X = kpi.dat[,7:45],MARGIN = 2,FUN = fill))
 kpi.dat$business = ifelse(str_count(kpi.dat$qu,pattern = "A"),"zl","mm")
 
 #----------------------------------------------------------------
@@ -120,6 +125,11 @@ gg.dat$mon =  as.numeric(str_sub(gg.dat$date,6,7))
 
 # NPS
 nps.dat = read_xlsx(path = jjrDataPath,sheet = "NPS值平均值",na="无")
+nps.dat = as.data.frame(nps.dat)
+names(nps.dat) <- c("date","mm","zl")
+for (i in seq_len(nrow(nps.dat))) {
+	nps.dat$date[i] =  as.character(shtFormat(nps.dat$date[i]))
+}
 nps.dat$date <- as.Date(nps.dat$date)
 
 
