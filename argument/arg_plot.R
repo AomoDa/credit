@@ -119,8 +119,9 @@ tb_zh_gw_in <- function(alpha,beta,s=10,n=10){
 # }
 
 
-
+#-----------------------------------
 #激励曲线
+#-----------------------------------
 
 plot_jili_sim_example <- function() {
   alpha = 3
@@ -134,7 +135,7 @@ plot_jili_sim_example <- function() {
   s_c_beta = sm$y[sm$x==s_beta]
   plot(sm,type="l",xlab="",ylab="",axes = FALSE,ylim=c(0,1),xlim=c(0,30),family="STXihei")
   axis(1, c(0,s_alpha,s_beta),c(0,expression(alpha),expression(beta)))
-  axis(2, c(0,s_c_alpha,s_c_beta,1),c(0,expression('Y'[alpha]) ,expression('Y'[beta]),1),las=1)
+  axis(2, c(0,s_c_alpha,s_c_beta,1),c(0,expression('S'[alpha]) ,expression('S'[beta]),1),las=1)
   graphics::box()
   segments(x0 = s_alpha,y0 = -1,x1 = s_alpha,y1 = s_c_alpha,col="red",lty=4)
   segments(x0 = -1,y0 = s_c_alpha,x1 = s_alpha,y1 = s_c_alpha,col="red",lty=4)
@@ -149,13 +150,14 @@ plot_jili_sim_example <- function() {
 
 
 
-plot_jili_sim_test <- function(alpha,beta,c_alpha,c_beta){
+plot_jili_sim_test <- function(alpha,beta,c_alpha,c_beta,gamma=1){
   alpha = as.numeric(alpha)
   beta = as.numeric(beta)
   c_alpha = as.numeric(c_alpha)
   c_beta = as.numeric(c_beta)
+  gamma = as.numeric(gamma)
   x=seq(from=0,to=beta*2,by=0.1)
-  y=growS(x,alpha,beta,c_alpha,c_beta)
+  y=growS(x,alpha,beta,c_alpha,c_beta,gamma)
   plot(x,y,type="l",xlab="",ylab="",ylim=c(0,1))
   abline(h=0,lty=2,col="orange")
   abline(h=1,lty=2,col="orange")
@@ -166,13 +168,14 @@ plot_jili_sim_test <- function(alpha,beta,c_alpha,c_beta){
 }
 
 
-plot_jili_sim_test_trend <- function(alpha,beta,c_alpha,c_beta){
+plot_jili_sim_test_trend <- function(alpha,beta,c_alpha,c_beta,gamma=1){
   alpha = as.numeric(alpha)
   beta = as.numeric(beta)
   c_alpha = as.numeric(c_alpha)
   c_beta = as.numeric(c_beta)
-  x=seq(from=1,to=beta*2,by=0.1)
-  y0 = growS(x,alpha,beta,c_alpha,c_beta)
+  gamma = as.numeric(gamma)
+  x=seq(from=1,to=beta*2,by=0.5)
+  y0 = growS(x,alpha,beta,c_alpha,c_beta,gamma)
   y1 = growS(x-1,alpha,beta,c_alpha,c_beta)
   y = y0 - y1
   plot(x,y,type="l",xlab="",ylab="")
@@ -185,13 +188,14 @@ plot_jili_sim_test_trend <- function(alpha,beta,c_alpha,c_beta){
 }
 
 
-tb_jili_in <- function(alpha,beta,c_alpha,c_beta){
+tb_jili_in <- function(alpha,beta,c_alpha,c_beta,gamma=1){
     alpha = as.numeric(alpha)
     beta = as.numeric(beta)
     c_alpha = as.numeric(c_alpha)
     c_beta = as.numeric(c_beta)
+    gamma = as.numeric(gamma)
     x=seq(from=1,to=beta*2,by=1)
-    y=growS(x,alpha,beta,c_alpha,c_beta)
+    y=growS(x,alpha,beta,c_alpha,c_beta,gamma)
     rlt=data.frame(
       "变量" = x,
       "得分比"=round(y,4), 
@@ -202,9 +206,35 @@ tb_jili_in <- function(alpha,beta,c_alpha,c_beta){
 
 
 
+#-----------------------------------
+# 司龄
+#-----------------------------------
 
+entry_para_plot_1 <- function(a,t) {
+  d = data.frame(x=1:120,"线性增加"=NA,"平滑曲线"=NA)
+  d[,2] = entry_simple(1:120,a=a)
+  d[,3] = entry_transfrom(1:120,t=t)
+  ggplot(data=d,aes(x=x)) + 
+    geom_line(aes(y=`线性增加`,col="线性增加"),lty=2,lwd=2) + 
+    geom_line(aes(y=`平滑曲线`,col="平滑曲线"),lty=1,lwd=1) +
+    theme_bw()+theme(text = element_text(family = "STXihei"))+
+    labs(x="司龄(月)",y="信用分",title="司龄信用积分 By 计算方法") 
 
+}
 
+entry_para_plot_2 <- function(a,t) {
+  d = data.frame(x=1:120,"线性增加"=NA,"平滑曲线"=NA)
+  d[,2] = entry_simple(1:120,a=a)
+  d[,2] = c(NA,diff(d[,2]))
+  d[,3] = entry_transfrom(1:120,t=t)
+  d[,3] = c(NA,diff(d[,3]))
+  ggplot(data=d[-1,],aes(x=x)) + 
+    geom_line(aes(y=`线性增加`,col="线性增加"),lty=2,lwd=2) + 
+    geom_line(aes(y=`平滑曲线`,col="平滑曲线"),lty=1,lwd=1) +
+    theme_bw()+theme(text = element_text(family = "STXihei"))+
+    labs(x="司龄(月)",y="新增信用分",title="新增司龄信用积分 By 计算方法") 
+
+}
 
 
 

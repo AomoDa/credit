@@ -5,7 +5,7 @@ arg_business_UI <- function(id="credit", label = "请选择文件") {
   tabItem(tabName = "arg_zhuanhua",height=1200,
 
          h2("转化公式参数设置"),  
-         box(title="参数设置",width=2,height=400,
+         box(title="激励曲线参数设置",width=2,height=400,
               numericInput(inputId = ns("zh_gw_alpha"),label = HTML("&alpha;"),
               value = 2,min = 0,max = 5,step=1),
               numericInput(inputId = ns("zh_gw_beta"),label = HTML("&beta;"),

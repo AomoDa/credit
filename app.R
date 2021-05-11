@@ -9,25 +9,27 @@ library(readxl)
 library(writexl)
 library(stringr)
 library(DT)
+library(logger)
+library(psych)
 # source
 source(file = "env.R")
 source(file = "func.R")
-source(file = "./data/gw.R")
-source(file = "./data/help.R")
+source(file = "./data/score.R")
 source(file = "./data/clean.R")
 source(file = "./data/calculate.R")
-source(file = "./analysis/plot.R")
+source(file = "./analysis/ana_plot.R")
 source(file = "./analysis/overview.R")
 source(file = "./analysis/base.R")
+source(file = "./analysis/gw.R")
 source(file = "./analysis/business.R")
 source(file = "./argument/overview.R")
-source(file = "./argument/plot.R")
+source(file = "./argument/arg_plot.R")
 source(file = "./argument/base.R")
 source(file = "./argument/attenuation.R")
 source(file = "./argument/behavior.R")
 source(file = "./argument/gw.R")
 source(file = "./argument/jili.R")
-source(file = "./compare/plot.R")
+source(file = "./compare/comp_plot.R")
 source(file = "./compare/trend.R")
 source(file = "./compare/jjr.R")
 # body
@@ -35,9 +37,9 @@ sidebar <- dashboardSidebar(
     sidebarMenu(
         menuItem("参数比较", tabName = "argument", icon = icon("th"),
                 menuSubItem("衰减算法",tabName="arg_attenuation"),
-                menuSubItem("基础素质",tabName="arg_base"),
+                menuSubItem("司龄算法",tabName="arg_base"),
                 menuSubItem("转化秩",tabName="arg_zhuanhua"),
-                menuSubItem("激励曲线",tabName="arg_jili")
+                menuSubItem("增长曲线",tabName="arg_jili")
             ),
         menuItem("数据分析", tabName = "analysis", icon = icon("th"),startExpanded=TRUE,
                 menuSubItem("信用分",tabName="ana_overview",selected=TRUE),
@@ -45,6 +47,7 @@ sidebar <- dashboardSidebar(
                 # menuSubItem("行为规范",tabName="ana_behavior"),
                 # menuSubItem("品质服务",tabName="ana_service"),
                 # menuSubItem("参与贡献",tabName="ana_contribute"),
+                menuSubItem("官网指标",tabName="ana_business_gw"),
                 menuSubItem("业务能力",tabName="ana_business")
             ),
         menuItem("对比分析", tabName = "compare", icon = icon("th"),
@@ -71,6 +74,7 @@ body <- dashboardBody(
         ana_overview_UI(),
         ana_business_UI(),
         ana_base_UI(),
+        ana_business_gw_UI(),
         #----------------------
         # # 对比分析
         ana_comp_trend_UI(),
@@ -93,6 +97,7 @@ server <- function(input, output,session) {
     ana_overview_Server()
     ana_business_Server()
     ana_base_Server()
+    ana_business_gw_Server()
     #----------------------
     # # 对比分析
     ana_comp_trend_Server()

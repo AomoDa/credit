@@ -2,9 +2,11 @@
 run_mon <- function(kpi.dat,gg.dat,base.dat,nps.dat,now_date,env,last_dat=NULL) {
 	now_date = as.Date(now_date)
 	rlt = data.frame(credit_date = now_date,id=base.dat$id)
+	log_info("开始处理程序：","数据日期 = ",as.character(now_date))
 	#----------------------------------------------------------------
 	# 基础素质
 	#----------------------------------------------------------------
+	log_info("Start - 基础素质")
 	# 个人背景 - 教育背景
 	rlt$education = credit_education(vec = base.dat$education,env = env)
 	# 个人背景 - 特长
@@ -19,13 +21,14 @@ run_mon <- function(kpi.dat,gg.dat,base.dat,nps.dat,now_date,env,last_dat=NULL) 
 	# 每日一考
 	rlt$exam = credit_score(id=rlt$id,
 		sdat=credit_exam(dat=kpi.dat,now_date=now_date,env=env))
-	cat("基础素质 ---> Succ : ",as.character(now_date),"\n")
 	# 汇总
 	rlt$base = rlt$education + rlt$hobby  + rlt$political + 
 			   rlt$entry + rlt$qualification + rlt$exam
+	log_info("End - 基础素质")		   
 	#----------------------------------------------------------------
 	# 行为规范
 	#----------------------------------------------------------------
+	log_info("Start - 行为规范")	
 	# 日常行为规范
 	rlt$daily = credit_score(id=rlt$id,
 		sdat=credit_daily(gg.dat,env=env,now_date=now_date,last_dat=last_dat),
@@ -34,12 +37,13 @@ run_mon <- function(kpi.dat,gg.dat,base.dat,nps.dat,now_date,env,last_dat=NULL) 
 	rlt$punish = credit_score(id=rlt$id,
 		sdat=credit_punish(gg.dat,env=env,now_date=now_date,last_dat=last_dat),
 		default=env$behavior$punish$total)	
-	cat("行为规范 ---> Succ : ",as.character(now_date),"\n")
 	# 汇总
 	rlt$behavior = rlt$daily + rlt$punish
+	log_info("End - 行为规范")	
 	#----------------------------------------------------------------
 	# 品质服务
 	#----------------------------------------------------------------	
+	log_info("Start - 品质服务")		
 	# 客户投诉
 	rlt$complaint = credit_score(id=rlt$id,
 		sdat=credit_complaint(gg.dat,env=env,now_date=now_date,last_dat=last_dat),
@@ -54,12 +58,13 @@ run_mon <- function(kpi.dat,gg.dat,base.dat,nps.dat,now_date,env,last_dat=NULL) 
 	# 经验值
 	rlt$jingyan = credit_score(id=rlt$id,
 		sdat=credit_jingyan(dat=kpi.dat,env=env,now_date=now_date))	
-	cat("品质服务 ---> Succ : ",as.character(now_date),"\n")
 	# 汇总
 	rlt$service = rlt$complaint + rlt$praise + rlt$nps + rlt$jingyan 
+	log_info("End - 品质服务")	
 	#----------------------------------------------------------------
 	# 参与贡献
-	#----------------------------------------------------------------	
+	#----------------------------------------------------------------
+	log_info("Start - 参与贡献")	
 	# 楼盘信息维护
 	rlt$xiaoqu = credit_score(id=rlt$id,
 		sdat=credit_xiaoqu(dat=kpi.dat,env=env,now_date=now_date))
@@ -71,12 +76,13 @@ run_mon <- function(kpi.dat,gg.dat,base.dat,nps.dat,now_date,env,last_dat=NULL) 
 	rlt$social = credit_social (dat=kpi.dat,env=env,now_date=now_date)
 	# 其他事项
 	rlt$other = credit_other(dat=kpi.dat,env=env,now_date=now_date)
-	cat("参与贡献 ---> Succ : ",as.character(now_date),"\n")
 	# 汇总
 	rlt$contribute = rlt$xiaoqu + rlt$teacher + rlt$recommend + rlt$social + rlt$other
+	log_info("End - 参与贡献")	
 	#----------------------------------------------------------------
 	# 业务能力 - 官网指标
 	#----------------------------------------------------------------	
+	log_info("Start - 官网指标")	
 	rlt$app = credit_score(id=rlt$id,
 		sdat=credit_app_download(kpi.dat,env=env,now_date=now_date))
 	rlt$call_answer = credit_score(id=rlt$id,
@@ -89,13 +95,14 @@ run_mon <- function(kpi.dat,gg.dat,base.dat,nps.dat,now_date,env,last_dat=NULL) 
 		sdat=credit_al_luru(kpi.dat,env=env,now_date=now_date))
 	rlt$al_daikan = credit_score(id=rlt$id,
 		sdat=credit_al_daikan(kpi.dat,env=env,now_date=now_date))
-	cat("官网指标 ---> Succ : ",as.character(now_date),"\n")
 	# 汇总
 	rlt$gw = rlt$app + rlt$call_answer + rlt$al_1min + rlt$al_3day +
 		     rlt$al_luru + rlt$al_daikan
+	log_info("End - 官网指标")			     
 	#----------------------------------------------------------------
 	# 业务能力 - 买卖
 	#----------------------------------------------------------------	
+	log_info("Start - 买卖指标")	
 	rlt$mm_deal = credit_score(id=rlt$id,
 		sdat=credit_mm_deal(kpi.dat,env=env,now_date=now_date))
 	rlt$mm_sx = credit_score(id=rlt$id,
@@ -112,13 +119,14 @@ run_mon <- function(kpi.dat,gg.dat,base.dat,nps.dat,now_date,env,last_dat=NULL) 
 		sdat=credit_mm_wt(kpi.dat,env=env,now_date=now_date))
 	rlt$mm_ys = credit_score(id=rlt$id,
 		sdat=credit_mm_ys(kpi.dat,env=env,now_date=now_date))
-	cat("买卖指标 ---> Succ : ",as.character(now_date),"\n")
 	# 汇总
 	rlt$mm = rlt$mm_deal + rlt$mm_sx + rlt$mm_zk + rlt$mm_csk +
              rlt$mm_csk  + rlt$mm_cdk +rlt$mm_fxz + rlt$mm_wt + rlt$mm_ys
+	log_info("End - 买卖指标")	             
 	#----------------------------------------------------------------
 	# 业务能力 - 租赁
 	#----------------------------------------------------------------	
+	log_info("Start - 租赁指标")	
 	rlt$zl_deal = credit_score(id=rlt$id,
 		sdat=credit_zl_deal(kpi.dat,env=env,now_date=now_date))
 	rlt$zl_sfg = credit_score(id=rlt$id,
@@ -135,7 +143,7 @@ run_mon <- function(kpi.dat,gg.dat,base.dat,nps.dat,now_date,env,last_dat=NULL) 
 		sdat=credit_zl_fxz(kpi.dat,env=env,now_date=now_date))
 	rlt$zl_pzsk = credit_score(id=rlt$id,
 		sdat=credit_zl_pzsk(kpi.dat,env=env,now_date=now_date))
-	cat("租赁指标 ---> Succ : ",as.character(now_date),"\n")
+	log_info("End - 租赁指标")	     
 	# 汇总
 	rlt$zl = rlt$zl_deal +  rlt$zl_sfg + rlt$zl_cfg + rlt$zl_zg+
 	         rlt$zl_wt +  rlt$zl_cxz + rlt$zl_fxz + rlt$zl_pzsk
@@ -156,7 +164,6 @@ run <- function(kpi.dat,gg.dat,base.dat,nps.dat,env) {
 				last_dat=rlt[rlt$credit_date==order_date[i-1],])
 			rlt = rbind(rlt,tmp)			
 		}
-		cat("Succ : ",as.character(order_date[i]),"\n")
 	}
 	# 关联经纪人身份
 	rlt = left_join(x = rlt,y = base.dat[,1:6],by="id")
@@ -171,7 +178,7 @@ run <- function(kpi.dat,gg.dat,base.dat,nps.dat,env) {
 }
 
 # 计算
-#finalScore = run(kpi.dat,gg.dat,base.dat,nps.dat,env)
+# finalScore = run(kpi.dat,gg.dat,base.dat,nps.dat,env)
 # write.csv(x = finalScore,file = "finalScore.csv",row.names =FALSE)
 finalScore = read.csv(file = "finalScore.csv",header = TRUE,stringsAsFactors = FALSE)
 finalScore$credit_date <- as.Date(finalScore$credit_date)

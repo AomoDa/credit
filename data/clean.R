@@ -97,9 +97,14 @@ fill <- function(vec,default=0){
 }
 
 # 读取数据
-kpi.dat = readData()
-kpi.dat[,7:45] <- as.data.frame( apply(X = kpi.dat[,7:45],MARGIN = 2,FUN = fill))
-kpi.dat$business = ifelse(str_count(kpi.dat$qu,pattern = "A"),"zl","mm")
+# kpi.dat = readData()
+# kpi.dat[,7:45] <- as.data.frame( apply(X = kpi.dat[,7:45],MARGIN = 2,FUN = fill))
+# kpi.dat$business = ifelse(str_count(kpi.dat$qu,pattern = "A"),"zl","mm")
+# write.csv(x = kpi.dat,file = "kpi.csv",row.names = FALSE)
+
+kpi.dat = read.csv("kpi.csv",stringsAsFactors = FALSE)
+kpi.dat$entry_date = as.Date(kpi.dat$entry_date)
+kpi.dat$date = as.Date(kpi.dat$date)
 
 #----------------------------------------------------------------
 # 经纪人基础信息数据
@@ -119,9 +124,6 @@ names(gg.dat) <- c("daqu","qu","zu","id","name","date","type","class")
 gg.dat$date <- as.Date(gg.dat$date)
 gg.dat$year =  as.numeric(str_sub(gg.dat$date,1,4))
 gg.dat$mon =  as.numeric(str_sub(gg.dat$date,6,7))
-
-# 写出数据
-# write_xlsx(list(kpi=kpi.dat,gg=gg.dat,base=base.dat),"data/jjr.xlsx")
 
 # NPS
 nps.dat = read_xlsx(path = jjrDataPath,sheet = "NPS值平均值",na="无")

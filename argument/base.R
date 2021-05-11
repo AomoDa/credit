@@ -1,6 +1,6 @@
 
 # UI
-arg_base_UI <- function(id="credit", label = "请选择文件") {
+arg_base_UI <- function(id="credit_base", label = "请选择文件") {
   ns <- NS(id)
   tabItem(tabName = "arg_base",height=1200,
           # h2("个人背景"),
@@ -93,7 +93,7 @@ arg_base_UI <- function(id="credit", label = "请选择文件") {
 
 
 # Server
-arg_base_Server <- function(id="credit") {
+arg_base_Server <- function(id="credit_base") {
   moduleServer(
     id,
     function(input, output, session) {

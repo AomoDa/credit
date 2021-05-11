@@ -2,6 +2,7 @@ library(plotly)
 library(ggplot2)
 library(dplyr)
 
+
 #-------------------------------------------
 # 个人背景
 #-------------------------------------------
@@ -20,34 +21,6 @@ entry_simple <- Vectorize(FUN=function(x,a) {
 	rt = ifelse(rt>0,rt,0)
 	return(rt)
 	},vectorize.args="x")
-
-entry_para_plot_1 <- function(a,t) {
-	d = data.frame(x=1:120,"线性增加"=NA,"平滑曲线"=NA)
-	d[,2] = entry_simple(1:120,a=a)
-	d[,3] = entry_transfrom(1:120,t=t)
-	ggplot(data=d,aes(x=x)) + 
-		geom_line(aes(y=`线性增加`,col="线性增加"),lty=2,lwd=2) + 
-		geom_line(aes(y=`平滑曲线`,col="平滑曲线"),lty=1,lwd=1) +
-		theme_bw()+theme(text = element_text(family = "STXihei"))+
-		labs(x="司龄(月)",y="信用分",title="司龄信用积分 By 计算方法") 
-
-}
-
-entry_para_plot_2 <- function(a,t) {
-	d = data.frame(x=1:120,"线性增加"=NA,"平滑曲线"=NA)
-	d[,2] = entry_simple(1:120,a=a)
-	d[,2] = c(NA,diff(d[,2]))
-	d[,3] = entry_transfrom(1:120,t=t)
-	d[,3] = c(NA,diff(d[,3]))
-	ggplot(data=d[-1,],aes(x=x)) + 
-		geom_line(aes(y=`线性增加`,col="线性增加"),lty=2,lwd=2) + 
-		geom_line(aes(y=`平滑曲线`,col="平滑曲线"),lty=1,lwd=1) +
-		theme_bw()+theme(text = element_text(family = "STXihei"))+
-		labs(x="司龄(月)",y="新增信用分",title="新增司龄信用积分 By 计算方法") 
-
-}
-
-
 
 
 #-------------------------------------------
@@ -76,17 +49,17 @@ simple_score_exam<- Vectorize(function(x,rule = env$base$exam){
 simple_score_nps <- Vectorize(function(x,business,nps.tb,rule){
 	nps = ifelse(business=="mm",nps.tb$mm,nps.tb$zl)
 	if(is.na(x)){
-		return(rule$score$`样本量少于5个`)
-	}else if (x == 1){
+		return(rule$score$`other`)
+	}else if (x >= 1){
 		return(rule$score$`100%`)
 	}else if (x >= nps){
 		return(rule$score$`平均值上`)
-	}else if (x >=0){
+	}else if (x > 0){
 		return(rule$score$`正分值且在平均分下`)
-	} else if (x <0){
+	} else if (x < 0){
 		return(rule$score$`负分值`)
 	} 
-	return(rule$score$`样本量少于5个`)	
+	return(rule$score$`other`)	
 
 },vectorize.args =c("x","business"))
 
@@ -200,25 +173,123 @@ simple_score_al_daikan <- Vectorize(function(x,rule = env$business$gw$al_daikan)
 },vectorize.args ="x")
 
 #-------------------------------------------
-# 激励曲线
+# 增加曲线
 #-------------------------------------------
-growS <- Vectorize(function(x,alpha,beta,c_alpha=0.9,c_beta=0.98,intercept=0){
-	a1 = (c_alpha ) / (exp(alpha) - exp(0))
-	b1 = c_alpha - a1 * exp( alpha)
+
+growS <- Vectorize(function(x,alpha,beta,c_alpha=0.9,c_beta=0.9,gamma=1){
+	# a1 = (c_alpha ) / (exp(alpha/gamma) - exp(0))
+	# b1 = c_alpha - a1 * exp( alpha/gamma)
+	a1 = c_alpha / (alpha/gamma)^2
+	
 	a2 = ( c_beta - c_alpha ) / log( beta / alpha )
-	b2 = c_beta - a2 * log( beta )
+	b2 = c_beta - a2 * log( beta/gamma )
+
 	a3 = (1 - c_beta) * 2 
 	b3 = 1 - a3 
-	if (x <= intercept){
+	if (x <= 0){
 		return(0)
 	} else if(x <= alpha){
-		rlt = a1 * exp(x) + b1 
+		rlt = a1 * (x/gamma)^2
 	}else if ( x <= beta){
-		rlt = a2 * log(x) + b2
+		rlt = a2 * log(x/gamma) + b2
 	}else{
-		rlt = a3 / (1 +exp((beta - x)/ (alpha +beta))) + b3
+		rlt = a3 / (1 + exp((beta - x/gamma)/ (alpha +beta))) + b3
 	}
 },vectorize.args="x")
+
+
+# 增长计算得分方法
+get_grow_score_func <- function(rule){
+	aa = ifelse( is.numeric(rule$score),rule$score,rule$score$limit)
+	function(x) aa * growS(x,alpha=rule$para$alpha,
+						beta=rule$para$beta,
+						c_alpha=rule$para$y_alpha,
+						c_beta=rule$para$y_beta)
+}
+
+#-------------------------------------------
+# 衰减系数
+#-------------------------------------------
+
+getCoefData <- function(dat,now_date,rule){
+	# 提取计算周期
+	now_date <- as.Date(now_date)
+	order_date = sort(unique(dat$date))
+	ind_right = which(order_date==now_date)
+	ind_left = ind_right-rule$cal$attenuation+1
+	ind_left = ifelse(ind_left>=1,ind_left,1)
+	cdate = order_date[ind_left:ind_right]
+	cn = length(cdate)
+	# 系数
+	coef_dat = data.frame(date=rev(cdate),coef= rule$cal$coef[1:cn] ) 
+	return(coef_dat)
+}
+
+
+
+#----------------------------------------
+# 官网指标计算
+#----------------------------------------
+
+# 转换秩
+gw_transform <- Vectorize(function(succ,n,alpha,beta) {
+	alpha = as.numeric(alpha)
+	beta = as.numeric(beta)
+  z = qnorm(0.975)
+  p = log((succ+alpha)) / log((n+beta))
+  r = ( p  + z^2 / ( 2 * (n+beta)) ) / (1 + z^2 / (n+beta))
+  return(r)
+},vectorize.args=c("succ","n"))
+
+# 官网计算方法
+get_gw_lv_func <- function(rule){
+	function(succ,n) gw_transform(succ,n,alpha=rule$para$alpha,beta=rule$para$beta)
+}
+
+# 官网得分计算
+gw_score <- Vectorize(function(rk,rule) {
+	# 排名0-1%（含）计 1
+	# 排名1%-5%（含）计0.9
+	# 排名5%-10%（含）计0.8
+	# 排名10%-20%（含）计0.7
+	# 排名20%-30%（含）计0.6
+	# 排名30%-40%（含）计0.5
+	# 排名40%-50%（含）计0.4
+	# 排名50-60%（含）计0.2
+	# 排名60%-80% （含）计0.1
+	# 排名前80%-100%（含）计0分
+	if(rk <= 0.01){
+		p =1 
+	}else if (rk <=0.05){
+		p = 0.9
+	}else if (rk <= 0.1){
+		p = 0.8
+	}else if (rk <= 0.2){
+		p = 0.7
+	}else if (rk <= 0.3){
+		p = 0.6
+	}else if (rk <= 0.4){
+		p = 0.5
+	}else if (rk <= 0.5){
+		p = 0.4
+	}else if (rk <= 0.6){
+		p = 0.2
+	}else if (rk <= 0.8){
+		p = 0.1
+	}else{
+		p = 0
+	}
+	return(p * rule$score$limit)
+},,vectorize.args="rk")
+
+# 官网计算方法
+get_gw_score_func <- function(rule) {
+	function(rk) gw_score(rk,rule=rule)
+}
+
+
+
+
 
 
 
