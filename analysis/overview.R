@@ -95,7 +95,17 @@ ana_overview_Server <- function(id="credit_ov") {
      output$tb_ow_1 <- renderDataTable(
       table_credit(input$tb_date_select,input$tb_business_select)
         
-      )   
+      )  
+
+    output$mt_download <- downloadHandler(
+        filename = function() {
+            paste("Credit-", Sys.Date(), ".xlsx", sep="")
+        },
+        content = function(file) {
+            write_xlsx(list("信用分"=finalScore),
+                       path = file)
+        }
+    )       
 
     }
   )

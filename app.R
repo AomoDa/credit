@@ -32,16 +32,18 @@ source(file = "./argument/jili.R")
 source(file = "./compare/comp_plot.R")
 source(file = "./compare/trend.R")
 source(file = "./compare/jjr.R")
+source(file = "./overview/project.R")
 # body
 sidebar <- dashboardSidebar(
     sidebarMenu(
+        menuItem("背景说明", tabName = "oo_oo", icon = icon("bookmark")),        
         menuItem("参数比较", tabName = "argument", icon = icon("th"),
                 menuSubItem("衰减算法",tabName="arg_attenuation"),
                 menuSubItem("司龄算法",tabName="arg_base"),
                 menuSubItem("转化秩",tabName="arg_zhuanhua"),
                 menuSubItem("增长曲线",tabName="arg_jili")
             ),
-        menuItem("数据分析", tabName = "analysis", icon = icon("th"),startExpanded=TRUE,
+        menuItem("数据分析", tabName = "analysis", icon = icon("calculator"),startExpanded=TRUE,
                 menuSubItem("信用分",tabName="ana_overview",selected=TRUE),
                 menuSubItem("基础素质",tabName="ana_base"),
                 # menuSubItem("行为规范",tabName="ana_behavior"),
@@ -50,7 +52,7 @@ sidebar <- dashboardSidebar(
                 menuSubItem("官网指标",tabName="ana_business_gw"),
                 menuSubItem("业务能力",tabName="ana_business")
             ),
-        menuItem("对比分析", tabName = "compare", icon = icon("th"),
+        menuItem("对比分析", tabName = "compare", icon = icon("balance-scale"),
                 menuSubItem("趋势对比",tabName="comp_trend"),
                 menuSubItem("经纪人对比",tabName="comp_jjr"),
                 menuSubItem("自定义",tabName="comp_custom")
@@ -78,7 +80,10 @@ body <- dashboardBody(
         #----------------------
         # # 对比分析
         ana_comp_trend_UI(),
-        ana_comp_jjr_UI()
+        ana_comp_jjr_UI(),
+        #----------------------
+        # # 其他 
+        oo_oo_UI()       
         )
 )
 
@@ -102,7 +107,9 @@ server <- function(input, output,session) {
     # # 对比分析
     ana_comp_trend_Server()
     ana_comp_jjr_Server()
-
+    #----------------------
+    # # 其他
+    oo_oo_Server()
 
 }
 

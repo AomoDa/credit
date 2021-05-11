@@ -240,11 +240,13 @@ credit_xiaoqu <- function(dat,env,now_date=Sys.Date()){
 	dat %>% 
 		filter(date <= now_date) %>%
 		filter(date >= min(coef_dat$date)) %>%
+		select(id,date,xiaoqu) %>%
+		mutate(xq= rule$score$score * xiaoqu)%>%
 		group_by(id,date) %>%
-		summarise(xiaoqu = rule$score * sum(xiaoqu,na.rm=TRUE),.groups = 'drop') %>%
+		summarise(s_mon = sum(xq,na.rm=TRUE),.groups = 'drop') %>%
 		inner_join(coef_dat,by="date")  %>%
 		group_by(id) %>%
-		summarise(s=sum(xiaoqu*coef)) %>%
+		summarise(s=sum(s_mon*coef)) %>%
 		mutate(s = if_else(s>=rule$total,rule$total,s)) %>%
 		as.data.frame()
 }

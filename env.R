@@ -41,6 +41,7 @@ env = list(
 			),
 		# 执业认证
 		qualification=list(
+			total=10,
 			# 获得的经纪人证和协理证，多本证书以最高级别记分
 			score=list(
 				"杭州经纪人证"=5,
@@ -50,6 +51,7 @@ env = list(
 			),
 		# 每日一考
 		exam=list(
+			total=20,
 			# 每日一考分
 			score=list(
 				"96~100分"=20,
@@ -149,7 +151,10 @@ env = list(
 		xiaoqu =list(
 			total=10,
 			# 得分权重
-			score=2,
+			score=list(
+				limit=10,
+				score=2
+				),
 			# 计算方法
 			cal=list(
 				attenuation=6,
@@ -158,6 +163,7 @@ env = list(
 			),
 		# 师徒带训
 		teacher=list(
+			total=30,
 			score=list(
 				zaizhi=10,
 				zhuanzheng=30
@@ -169,6 +175,7 @@ env = list(
 			),
 		# 推荐入职
 		recommend=list(
+			total=20,
 			score=10,
 			cal=list(
 				attenuation=6,
@@ -177,6 +184,7 @@ env = list(
 			),
 		# 社会活动参与
 		social=list(
+			total=10,
 			score=10,
 			cal=list(
 				attenuation=6,
@@ -185,6 +193,7 @@ env = list(
 			),
 		# 其他事项
 		other=list(
+			total=10,
 			score=2,
 			cal=list(
 				attenuation=6,
