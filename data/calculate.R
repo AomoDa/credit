@@ -1,3 +1,4 @@
+library(logger)
 # 计算一个月
 run_mon <- function(kpi.dat,gg.dat,base.dat,nps.dat,now_date,env,last_dat=NULL) {
 	now_date = as.Date(now_date)
@@ -177,7 +178,7 @@ run <- function(kpi.dat,gg.dat,base.dat,nps.dat,env) {
 	return(rlt)
 }
 
-# 计算
+# # 计算
 # finalScore = run(kpi.dat,gg.dat,base.dat,nps.dat,env)
 # write.csv(x = finalScore,file = "finalScore.csv",row.names =FALSE)
 finalScore = read.csv(file = "finalScore.csv",header = TRUE,stringsAsFactors = FALSE)

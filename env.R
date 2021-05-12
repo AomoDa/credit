@@ -311,7 +311,8 @@ env = list(
 				method="transform",
 				score=list(
 					mm_2=6,
-					mm_1=8
+					mm_1=8,
+					limit=90
 					),
 				cal=list(
 					attenuation=6,
@@ -329,7 +330,10 @@ env = list(
 			mm_sx = list(
 				total=20,
 				method="transform",
-				score=20,
+				score=list(
+					limit=20,
+					score=6
+					),
 				cal=list(
 					attenuation=6,
 					coef=c(1,1,1,1,1,1)
@@ -346,7 +350,10 @@ env = list(
 			mm_zk = list(
 				total=20,
 				method="transform",
-				score=20,
+				score=list(
+					limit=20,
+					score=6
+					),
 				cal=list(
 					attenuation=6,
 					coef=c(1,1,1,1,1,1)
@@ -396,7 +403,7 @@ env = list(
 					),
 				# 参数设置
 				para=list(
-					alpha=14,
+					alpha=12,
 					y_alpha=0.7,
 					beta=30,
 					y_beta=0.9
@@ -433,7 +440,7 @@ env = list(
 				para=list(
 					alpha=2,
 					y_alpha=0.7,
-					beta=5,
+					beta=4,
 					y_beta=0.9
 					)
 
@@ -442,7 +449,9 @@ env = list(
 			mm_ys=list(
 				total=10,
 				method="transform",
-				score=5,
+				score=list(
+					score=5,
+					limit=10),
 				cal=list(
 					attenuation=6,
 					coef=c(1,0.5,0.2,0.1,0.1,0.1)
@@ -451,7 +460,7 @@ env = list(
 				para=list(
 					alpha=2,
 					y_alpha=0.7,
-					beta=5,
+					beta=4,
 					y_beta=0.9
 					)
 

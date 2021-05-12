@@ -39,7 +39,7 @@ sidebar <- dashboardSidebar(
         menuItem("背景说明", tabName = "oo_oo", icon = icon("bookmark")),        
         menuItem("参数比较", tabName = "argument", icon = icon("th"),
                 menuSubItem("衰减算法",tabName="arg_attenuation"),
-                menuSubItem("司龄算法",tabName="arg_base"),
+                menuSubItem("Logit算法",tabName="arg_base"),
                 menuSubItem("转化秩",tabName="arg_zhuanhua"),
                 menuSubItem("增长曲线",tabName="arg_jili")
             ),

@@ -484,8 +484,10 @@ credit_mm_sx <- function(dat,now_date,env){
 	credit_log(msg="买卖指标- 速销",rule)	
 	# 提取计算周期 & 系数 
 	coef_dat=getCoefData(dat = dat,now_date = now_date,rule = rule)
-	# 得分方法
-	sf = get_grow_score_func(rule)	
+	# # 得分方法
+	# sf = get_grow_score_func(rule)	
+	# 得分方法 - 线性模型
+	sf = get_grow_score_linear_func(rule)		
 	dat %>% 
 		filter(date <= now_date) %>%
 		filter(date >= min(coef_dat$date)) %>%
@@ -504,8 +506,10 @@ credit_mm_zk <- function(dat,now_date,env){
 	credit_log(msg="买卖指标- 折扣",rule)	
 	# 提取计算周期 & 系数 
 	coef_dat=getCoefData(dat = dat,now_date = now_date,rule = rule)
-	# 得分方法
-	sf = get_grow_score_func(rule)
+	# 得分方法 - 增长曲线
+	# sf = get_grow_score_func(rule)
+	# 得分方法 - 线性模型
+	sf = get_grow_score_linear_func(rule)
 	dat %>% 
 		filter(date <= now_date) %>%
 		filter(date >= min(coef_dat$date)) %>%
@@ -607,8 +611,10 @@ credit_mm_ys <- function(dat,now_date,env) {
 	credit_log(msg="买卖指标- 收钥匙",rule)	
 	# 提取计算周期 & 系数 
 	coef_dat=getCoefData(dat = dat,now_date = now_date,rule = rule)
-	# 得分方法
-	sf = get_grow_score_func(rule)
+	# # 得分方法
+	# sf = get_grow_score_func(rule)
+	# 得分方法 - 线性模型
+	sf = get_grow_score_linear_func(rule)	
 	dat %>% 
 		filter(date <= now_date) %>%
 		filter(date >= min(coef_dat$date)) %>%

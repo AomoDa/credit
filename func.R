@@ -172,8 +172,10 @@ simple_score_al_daikan <- Vectorize(function(x,rule = env$business$gw$al_daikan)
 	}
 },vectorize.args ="x")
 
+
+
 #-------------------------------------------
-# 增加曲线
+# 增长曲线
 #-------------------------------------------
 
 growS <- Vectorize(function(x,alpha,beta,c_alpha=0.9,c_beta=0.9,gamma=1){
@@ -206,6 +208,17 @@ get_grow_score_func <- function(rule){
 						c_alpha=rule$para$y_alpha,
 						c_beta=rule$para$y_beta)
 }
+
+
+# 线性模型
+get_grow_score_linear_func <- function(rule) {
+	Vectorize(function(x) {
+		x1 = rule$score$score * x 
+		x2 = rule$score$limit
+		return(min(x1,x2))
+	})
+}
+
 
 #-------------------------------------------
 # 衰减系数

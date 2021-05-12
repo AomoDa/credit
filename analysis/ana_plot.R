@@ -112,10 +112,10 @@ table_base <- function(now_date,bty){
                 "执业认证"="qualification",
                 "每日一考"="exam"
 				) %>%
-		describe(quant=c(0.25,0.75),skew=FALSE,IQR=TRUE) %>% 
+		describe(quant=c(0.25,0.5,0.75),skew=FALSE,IQR=TRUE) %>% 
 		t() %>% as.data.frame() %>% round(2)
 	a = a[-c(1,8),]	
-	row.names(a) <- c("样本量","均值","标准差","最小值","最大值","全距","四分位距","Q25","Q75")
+	row.names(a) <- c("样本量","均值","标准差","最小值","最大值","全距","四分位距","Q25","中位数","Q75")
 	return(a)	
 
 }
@@ -137,10 +137,10 @@ table_gw <- function(now_date,bty){
                 "爱聊录入率"="al_luru",
                 "爱聊转带看"="al_daikan"
 				) %>%
-		describe(quant=c(0.25,0.75),skew=FALSE,IQR=TRUE) %>% 
+		describe(quant=c(0.25,0.5,0.75),skew=FALSE,IQR=TRUE) %>% 
 		t() %>% as.data.frame() %>% round(2)
 	a = a[-c(1,8),]	
-	row.names(a) <- c("样本量","均值","标准差","最小值","最大值","全距","四分位距","Q25","Q75")
+	row.names(a) <- c("样本量","均值","标准差","最小值","最大值","全距","四分位距","Q25","中位数","Q75")
 	return(a)	
 
 }
@@ -162,10 +162,10 @@ table_mm <- function(now_date,bty="mm"){
                 "认证委托"="mm_wt",
                 "钥匙"="mm_ys"
 				) %>%
-		describe(quant=c(0.25,0.75),skew=FALSE,IQR=TRUE) %>% 
+		describe(quant=c(0.25,0.5,0.75),skew=FALSE,IQR=TRUE) %>% 
 		t() %>% as.data.frame() %>% round(2)
 	a = a[-c(1,8),]	
-	row.names(a) <- c("样本量","均值","标准差","最小值","最大值","全距","四分位距","Q25","Q75")
+	row.names(a) <- c("样本量","均值","标准差","最小值","最大值","全距","四分位距","Q25","中位数","Q75")
 	return(a)	
 
 }
@@ -188,10 +188,10 @@ table_zl <- function(now_date,bty="zl"){
                 "房源新增"="zl_fxz",
                 "普租实勘"="zl_pzsk"
 				) %>%
-		describe(quant=c(0.25,0.75),skew=FALSE,IQR=TRUE) %>% 
+		describe(quant=c(0.25,0.5,0.75),skew=FALSE,IQR=TRUE) %>% 
 		t() %>% as.data.frame() %>% round(2)
 	a = a[-c(1,8),]	
-	row.names(a) <- c("样本量","均值","标准差","最小值","最大值","全距","四分位距","Q25","Q75")
+	row.names(a) <- c("样本量","均值","标准差","最小值","最大值","全距","四分位距","Q25","中位数","Q75")
 	return(a)	
 
 }
