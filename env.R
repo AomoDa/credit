@@ -165,8 +165,8 @@ env = list(
 		teacher=list(
 			total=30,
 			score=list(
-				zaizhi=10,
-				zhuanzheng=30
+				zaizhi=5,
+				zhuanzheng=8
 				),
 			cal=list(
 				attenuation=6,
@@ -327,9 +327,9 @@ env = list(
 				),
 			# 速销
 			mm_sx = list(
-				total=30,
+				total=20,
 				method="transform",
-				score=5,
+				score=20,
 				cal=list(
 					attenuation=6,
 					coef=c(1,1,1,1,1,1)
@@ -344,9 +344,9 @@ env = list(
 				),
 			# 折扣率
 			mm_zk = list(
-				total=30,
+				total=20,
 				method="transform",
-				score=5,
+				score=20,
 				cal=list(
 					attenuation=6,
 					coef=c(1,1,1,1,1,1)

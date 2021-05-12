@@ -96,7 +96,7 @@ fill <- function(vec,default=0){
 	return(a)
 }
 
-# 读取数据
+#读取数据
 # kpi.dat = readData()
 # kpi.dat[,7:45] <- as.data.frame( apply(X = kpi.dat[,7:45],MARGIN = 2,FUN = fill))
 # kpi.dat$business = ifelse(str_count(kpi.dat$qu,pattern = "A"),"zl","mm")
