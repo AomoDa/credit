@@ -25,7 +25,7 @@ ana_business_UI <- function(id="credit_mm_zl", label = "请选择文件") {
                 choices=list("买卖"="mm"),
                 selected= c("mm"),multiple=TRUE) ,  
               selectInput(inputId=ns("plot_mm_bin_select"),label="请选择条形宽度",
-                choices=c(1,2,5,10,30,50),selected= 5)
+                choices=c(0.1,0.2,0.5,1,2,5,10,20,30,50),selected= 5)
 
           ),
           box(
@@ -68,7 +68,7 @@ ana_business_UI <- function(id="credit_mm_zl", label = "请选择文件") {
                 choices=list("租赁"="zl"),
                 selected= c("zl"),multiple=TRUE) ,  
               selectInput(inputId=ns("plot_zl_bin_select"),label="请选择条形宽度",
-                choices=c(1,2,5,10,30,50),selected= 5)
+                choices=c(0.1,0.2,0.5,1,2,5,10,20,30,50),selected= 5)
           ),
           box(
               title = "经纪人信用分分布情况", solidHeader = TRUE,width=6,height=500,       

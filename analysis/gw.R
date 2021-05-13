@@ -23,7 +23,7 @@ ana_business_gw_UI <- function(id="credit_gw", label = "请选择文件") {
                 choices=list("买卖"="mm","租赁"="zl"),
                 selected= c("mm","zl"),multiple=TRUE) ,  
               selectInput(inputId=ns("plot_gw_bin_select"),label="请选择条形宽度",
-                choices=c(1,2,5,10,30,50),selected= 5)
+                choices=c(0.1,0.2,0.5,1,2,5,10,20,30,50),selected= 5)
 
           ),
           box(

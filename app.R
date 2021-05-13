@@ -21,6 +21,8 @@ source(file = "./analysis/ana_plot.R")
 source(file = "./analysis/overview.R")
 source(file = "./analysis/base.R")
 source(file = "./analysis/gw.R")
+source(file = "./analysis/plot_bk.R")
+source(file = "./analysis/beike.R")
 source(file = "./analysis/business.R")
 source(file = "./argument/overview.R")
 source(file = "./argument/arg_plot.R")
@@ -55,7 +57,7 @@ sidebar <- dashboardSidebar(
         menuItem("对比分析", tabName = "compare", icon = icon("balance-scale"),
                 menuSubItem("趋势对比",tabName="comp_trend"),
                 menuSubItem("经纪人对比",tabName="comp_jjr"),
-                menuSubItem("自定义",tabName="comp_custom")
+                menuSubItem("竞对分析",tabName="comp_beike")
             )                  
         )
 )
@@ -81,6 +83,7 @@ body <- dashboardBody(
         # # 对比分析
         ana_comp_trend_UI(),
         ana_comp_jjr_UI(),
+        ana_bk_UI(),
         #----------------------
         # # 其他 
         oo_oo_UI()       
@@ -107,6 +110,7 @@ server <- function(input, output,session) {
     # # 对比分析
     ana_comp_trend_Server()
     ana_comp_jjr_Server()
+    ana_bk_Server()
     #----------------------
     # # 其他
     oo_oo_Server()

@@ -31,10 +31,10 @@ table_credit <- function(now_date,bty){
 				`官网指标`=gw,
 				`买卖指标`=mm,
 				`租赁指标`=zl) %>%
-		describe(quant=c(0.25,0.75),skew=FALSE,IQR=TRUE) %>% 
+		describe(quant=c(0.25,0.5,0.75),skew=FALSE,IQR=TRUE) %>% 
 		t() %>% as.data.frame() %>% round(2)
 	a = a[-c(1,8),]	
-	row.names(a) <- c("样本量","均值","标准差","最小值","最大值","全距","四分位距","Q25","Q75")
+	row.names(a) <- c("样本量","均值","标准差","最小值","最大值","全距","四分位距","Q25","中位数","Q75")
 	return(a)	
 
 }
