@@ -102,14 +102,22 @@ ana_comp_trend_Server <- function(id="credit_trend") {
         btype="zl")
       )
 
-    output$plot_grow_zl_jjr <- renderPlotly(
+    output$plot_grow_zl_jjr <- renderPlotly({
+
+      if(is.null(input$plot_comp_grow_date_select_zl)) return(NULL)
+
       grow_credit(var=input$plot_comp_grow_var_select_zl,
         jjr_list=input$plot_comp_grow_date_select_zl)
+    }
     
     )
-    output$plot_grow_mm_jjr <- renderPlotly(
+    output$plot_grow_mm_jjr <- renderPlotly({
+
+      if(is.null(input$plot_comp_grow_date_select_mm)) return(NULL)   
+
       grow_credit(var=input$plot_comp_grow_var_select_mm,
         jjr_list=input$plot_comp_grow_date_select_mm)
+    }
     
     )
 

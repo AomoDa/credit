@@ -68,27 +68,31 @@ ana_comp_jjr_Server <- function(id="credit") {
     selected=Xzl_jjrList[1:3]) 
 
 
-    output$p_zl <- renderPlotly(
+    output$p_zl <- renderPlotly({
+      if(is.null(input$plot_comp_jjr_zl))return(NULL)
       grow_credit(var="score",
-        jjr_list=input$plot_comp_jjr_zl)
+        jjr_list=input$plot_comp_jjr_zl)}
     
     )
-    output$p_zl2 <- renderPlotly(
+    output$p_zl2 <- renderPlotly({
+      if(is.null(input$plot_comp_jjr_zl))return(NULL)
       bar_jjr_credit(now_date=input$plot_comp_jjr_zl_date_select,
         jjr_list=input$plot_comp_jjr_zl)
-    
-    )    
-    output$p_mm <- renderPlotly(
+    })    
+
+    output$p_mm <- renderPlotly({
+      if(is.null(input$plot_comp_jjr_mm))return(NULL)    
       grow_credit(var="score",
         jjr_list=input$plot_comp_jjr_mm)
     
-    )
+    })   
 
-    output$p_mm2 <- renderPlotly(
+    output$p_mm2 <- renderPlotly({
+      if(is.null(input$plot_comp_jjr_mm))return(NULL)       
       bar_jjr_credit(now_date=input$plot_comp_jjr_mm_date_select,
         jjr_list=input$plot_comp_jjr_mm)
     
-    )
+    })   
 
 
 
