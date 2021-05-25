@@ -35,7 +35,6 @@ grow_credit <- function(var,jjr_list){
 
 # 经纪人分数对比
 
-
 # 经纪人任务完成情况
 bar_jjr_credit <- function(now_date,jjr_list){
 	now_date = as.Date(now_date)
@@ -68,4 +67,86 @@ bar_jjr_credit <- function(now_date,jjr_list){
 		theme(axis.text.x = element_text(angle=45))
 	ggplotly(p1)
 }	
+
+
+# 区域分析
+
+plot_score_daqu_mm <- function(now_date){
+	tmp= finalScore %>% 
+			filter(credit_date == now_date) %>% 
+			filter(business_type=="mm") %>% 
+			select(daqu,score)
+	rdaqu = with(tmp,reorder(daqu,-score,median))
+	p1 = ggplot(data=tmp,aes(x=rdaqu,y=score,fill=daqu)) + geom_boxplot()+
+		theme_bw() +  theme(text= element_text(family="STXihei")) +
+		labs(x="",y="分",title=paste0("信用分大区分布: ",now_date))+
+		theme(axis.text.x = element_text(angle=45))
+	ggplotly(p1)
+}
+
+plot_score_daqu_zl <- function(now_date){
+	tmp= finalScore %>% 
+			filter(credit_date == now_date) %>% 
+			filter(business_type=="zl") %>% 
+			select(daqu,score)
+	rdaqu = with(tmp,reorder(daqu,-score,median))
+	p1 = ggplot(data=tmp,aes(x=rdaqu,y=score,fill=daqu)) + geom_boxplot()+
+		theme_bw() +  theme(text= element_text(family="STXihei")) +
+		labs(x="",y="分",title=paste0("信用分大区分布: ",now_date))+
+		theme(axis.text.x = element_text(angle=45))
+	ggplotly(p1)
+}
+
+
+# 新人成长趋势分布
+
+plot_score_new_user_box <- function(bty="mm") {
+	a=finalScore %>% 
+			filter(business_type==bty) %>% 
+			select(entry_month,score) %>% 
+			filter(entry_month<=24)  %>% 
+			ggplot(aes(x=as.factor(entry_month),y=score,fill=entry_month)) + 
+			geom_boxplot(notchwidth=0)	+
+			theme_bw() +  theme(text= element_text(family="STXihei")) +
+			labs(x="",y="分",title=paste0("信用分成长趋势"))+
+			 scale_fill_distiller(palette = "Spectral")
+	ggplotly(a)		 
+
+}
+
+
+
+
+plot_score_new_user_line <- function(bty="mm") {
+	s = finalScore$score[finalScore$business_type==bty & finalScore$credit_date==as.Date("2021-03-01")]
+	sm = median(s)
+	sm_l = quantile(s,0.25)
+	sm_u = quantile(s,0.75)
+	a=finalScore %>% 
+			filter(business_type==bty) %>% 
+			select(entry_month,score) %>% 
+			filter(entry_month<=24)  %>% 
+			group_by(entry_month) %>%
+			summarise(score=median(score,na.rm=TRUE)) %>%
+			ggplot(aes(x=entry_month,y=score)) + 
+			geom_line()	+
+			geom_hline(yintercept=sm,col=I("red"),lty=2) + 
+			geom_hline(yintercept=sm_l,col=I("blue"),lty=2) + 
+			geom_hline(yintercept=sm_u,col=I("blue"),lty=2) + 
+			geom_point(pch=5)	+
+			theme_bw() +  theme(text= element_text(family="STXihei")) +
+			labs(x="",y="分",title=paste0("信用分成长趋势"))+
+			 scale_fill_distiller(palette = "Spectral")
+	ggplotly(a)		 
+
+}
+
+
+
+
+
+
+
+
+
 

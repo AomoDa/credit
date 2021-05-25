@@ -188,6 +188,9 @@ run <- function(kpi.dat,gg.dat,env) {
 	rlt$mm[rlt$business_type=="zl"] = 0     
 	rlt$score = rlt$base + rlt$behavior + rlt$service + 
 				rlt$contribute + rlt$gw + rlt$mm + rlt$zl	
+	rlt$entry_date_num = as.numeric(substr(rlt$entry_date,1,4)) * 12 + as.numeric(substr(rlt$entry_date,6,7)) 
+	rlt$data_date_num = as.numeric(substr(rlt$credit_date,1,4)) * 12 + as.numeric(substr(rlt$credit_date,6,7)) 
+	rlt$entry_month = rlt$data_date_num - rlt$entry_date_num
 	return(rlt)
 }
 

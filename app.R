@@ -35,6 +35,9 @@ source(file = "./compare/comp_plot.R")
 source(file = "./compare/trend.R")
 source(file = "./compare/jjr.R")
 source(file = "./overview/project.R")
+source(file = "./compare/qu.R")
+source(file = "./compare/new.R")
+
 # body
 sidebar <- dashboardSidebar(
     sidebarMenu(
@@ -57,6 +60,8 @@ sidebar <- dashboardSidebar(
         menuItem("对比分析", tabName = "compare", icon = icon("balance-scale"),
                 menuSubItem("趋势对比",tabName="comp_trend"),
                 menuSubItem("经纪人对比",tabName="comp_jjr"),
+                menuSubItem("大区对比",tabName="comp_qu"),  
+                menuSubItem("新人成长",tabName="comp_new"),                  
                 menuSubItem("竞对分析",tabName="comp_beike")
             )                  
         )
@@ -84,6 +89,8 @@ body <- dashboardBody(
         ana_comp_trend_UI(),
         ana_comp_jjr_UI(),
         ana_bk_UI(),
+        ana_comp_qu_UI(),
+        ana_comp_new_UI(),        
         #----------------------
         # # 其他 
         oo_oo_UI()       
@@ -111,6 +118,8 @@ server <- function(input, output,session) {
     ana_comp_trend_Server()
     ana_comp_jjr_Server()
     ana_bk_Server()
+    ana_comp_new_Server()
+    ana_comp_qu_Server()
     #----------------------
     # # 其他
     oo_oo_Server()
