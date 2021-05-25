@@ -106,7 +106,8 @@ kpi.dat$date = as.Date(kpi.dat$date)
 # 经纪人宫格数据
 #----------------------------------------------------------------
 
-gg.dat = read_xlsx(path = ggDataPath,sheet = "Sheet1")
+# gg.dat = read_xlsx(path = ggDataPath,sheet = "Sheet1")
+gg.dat = read.csv("gg.dat.csv",stringsAsFactors = FALSE)
 gg.dat$date = as.Date(gg.dat$date )
 gg.dat$year =  as.numeric(str_sub(gg.dat$date,1,4))
 gg.dat$mon =  as.numeric(str_sub(gg.dat$date,6,7))
