@@ -17,6 +17,18 @@ hist_credit <- function(var,now_date,btype="mm",binwidth=10){
 }
 
 
+density_credit <- function(var,now_date,binwidth=10){
+	now_date = as.Date(now_date)
+	finalScore$tmp <- finalScore[,var]
+	p1 = finalScore %>% 
+		filter(credit_date==now_date) %>% 
+		ggplot(aes(x=tmp)) + 
+		geom_density(aes(fill=business_type,col=business_type),alpha=0.4,show.legend=FALSE)+
+		theme_bw() +  theme(text= element_text(family="STXihei")) +  
+		labs(x="信用分",y="经纪人数",title=paste0("经纪人信用分分布情况: ",now_date))
+	ggplotly(p1)
+}
+
 
 table_credit <- function(now_date,bty){
 	now_date = as.Date(now_date)

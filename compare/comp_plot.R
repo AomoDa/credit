@@ -97,12 +97,41 @@ plot_score_daqu_zl <- function(now_date){
 	ggplotly(p1)
 }
 
+# 职阶
+plot_score_level_mm <- function(now_date){
+	tmp= finalScore %>% 
+			filter(credit_date == now_date) %>% 
+			filter(business_type=="mm") %>% 
+			select(level,score)
+	rlevel = with(tmp,reorder(level,score,median))
+	p1 = ggplot(data=tmp,aes(x=rlevel,y=score,fill=level)) + geom_boxplot()+
+		theme_bw() +  theme(text= element_text(family="STXihei")) +
+		labs(x="",y="分",title=paste0("信用分职级分布: ",now_date))+
+		theme(axis.text.x = element_text(angle=45))
+	ggplotly(p1)
+}
+
+plot_score_level_zl <- function(now_date){
+	tmp= finalScore %>% 
+			filter(credit_date == now_date) %>% 
+			filter(business_type=="zl") %>% 
+			select(level,score)
+	rlevel = with(tmp,reorder(level,score,median))
+	p1 = ggplot(data=tmp,aes(x=rlevel,y=score,fill=level)) + geom_boxplot()+
+		theme_bw() +  theme(text= element_text(family="STXihei")) +
+		labs(x="",y="分",title=paste0("信用分职级分布: ",now_date))+
+		theme(axis.text.x = element_text(angle=45))
+	ggplotly(p1)
+}
+
 
 # 新人成长趋势分布
 
 plot_score_new_user_box <- function(bty="mm") {
 	a=finalScore %>% 
 			filter(business_type==bty) %>% 
+			filter(credit_date >= as.Date("2020-07-01")) %>% 
+			# filter(credit_date != as.Date("2021-02-01")) %>% 			
 			select(entry_month,score) %>% 
 			filter(entry_month<=24)  %>% 
 			ggplot(aes(x=as.factor(entry_month),y=score,fill=entry_month)) + 
@@ -124,6 +153,8 @@ plot_score_new_user_line <- function(bty="mm") {
 	sm_u = quantile(s,0.75)
 	a=finalScore %>% 
 			filter(business_type==bty) %>% 
+			filter(credit_date >= as.Date("2020-07-01")) %>% 	
+			# filter(credit_date != as.Date("2021-02-01")) %>% 						
 			select(entry_month,score) %>% 
 			filter(entry_month<=24)  %>% 
 			group_by(entry_month) %>%

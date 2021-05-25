@@ -3,7 +3,7 @@ ana_comp_qu_UI <- function(id="credit_new", label = "请选择文件") {
   ns <- NS(id)
   tabItem(tabName = "comp_new",height=1200,
 
-          h2("新人信用积分成长趋势"),hr(),
+          h2("买卖比较"),hr(),
           # box(
           #     title = "经纪人信用分分布情况", solidHeader = TRUE,width=2,height=500,   
 
@@ -14,12 +14,11 @@ ana_comp_qu_UI <- function(id="credit_new", label = "请选择文件") {
               title = "买卖新人", solidHeader = TRUE,width=6,height=500,       
               plotlyOutput(ns("mm_new"))
           ),
-
           box(
               title = "买卖新人", solidHeader = TRUE,width=6,height=500,       
               plotlyOutput(ns("mm_new_line"))
           ),
-
+          h2("租赁比较"),hr(),
           box(
               title = "租赁新人", solidHeader = TRUE,width=6,height=500,       
               plotlyOutput(ns("zl_new"))

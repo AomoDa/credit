@@ -60,7 +60,7 @@ sidebar <- dashboardSidebar(
         menuItem("对比分析", tabName = "compare", icon = icon("balance-scale"),
                 menuSubItem("趋势对比",tabName="comp_trend"),
                 menuSubItem("经纪人对比",tabName="comp_jjr"),
-                menuSubItem("大区对比",tabName="comp_qu"),  
+                menuSubItem("分组对比",tabName="comp_qu"),  
                 menuSubItem("新人成长",tabName="comp_new"),                  
                 menuSubItem("竞对分析",tabName="comp_beike")
             )                  

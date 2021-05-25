@@ -31,10 +31,18 @@ ana_overview_UI <- function(id="credit_ov", label = "请选择文件") {
               downloadButton(outputId = ns("mt_download"),label = "点击下载数据"),
 
           ),
-          box(
-              title = "经纪人信用分分布情况", solidHeader = TRUE,width=6,height=500,       
-              plotlyOutput(ns("plot_1"))
-          ),
+          # box(
+          #     title = "经纪人信用分分布情况", solidHeader = TRUE,width=6,height=500,       
+          #     plotlyOutput(ns("plot_1"))
+          # ),
+
+          tabBox(title = "",width=6,height=500,
+              tabPanel(title = "直方图",plotlyOutput(ns("plot_1"))), 
+              tabPanel(title = "密度图",plotlyOutput(ns("plot_11"))) 
+              ),
+              
+
+
           #-------------------------------
           # 统计表格
           #-------------------------------
@@ -81,6 +89,13 @@ ana_overview_Server <- function(id="credit_ov") {
         binwidth= as.numeric(input$plot_1_bin_select)
         )
       )
+
+    output$plot_11 <- renderPlotly(
+      density_credit(var=input$plot_1_var_select,
+        now_date=input$plot_1_date_select
+        )
+      )
+
 
     output$plot_2 <- renderPlot(
       box_credit(now_date=input$plot_1_date_select)
