@@ -106,7 +106,7 @@ table_base <- function(now_date,bty){
 		select(
 				`基础素质`=base,
                 "教育背景"="education",
-                "特长"="hobby",
+                # "特长"="hobby",
                 "政治背景"="political",
                 "司龄"="entry",
                 "执业认证"="qualification",
@@ -153,10 +153,13 @@ table_mm <- function(now_date,bty="mm"){
 		filter(credit_date==now_date) %>%
 		select(
 				`买卖总分`=mm,
-                "买卖成交"="mm_deal",
-                "速销"="mm_sx",
+                # "买卖成交"="mm_deal",
+                # "速销"="mm_sx",
+                "收-速销房"=`mm_s_sx`,
+                "出-速销房"=`mm_c_sx`,
+                "转介客源"=`mm_zjky`,
                 "折扣率"="mm_zk",
-                "客户首看"="mm_csk",
+                "客户新增"="mm_cxz",
                 "客户带看组数"="mm_cdk",
                 "房源新增"="mm_fxz",
                 "认证委托"="mm_wt",
@@ -179,9 +182,11 @@ table_zl <- function(now_date,bty="zl"){
 		filter(credit_date==now_date) %>%
 		select(
 				`租赁总分`=zl,
-                "租赁成交"="zl_deal",
+                # "租赁成交"="zl_deal",
                 "房管收房"="zl_sfg",
-                "房管出房"="zl_cfg",
+                # "房管出房"="zl_cfg",
+                "合作出房"="zl_fhz",
+                "出着火房"="zl_czh",
                 "在管量"="zl_zg",
                 "委托续签量"="zl_wt",
                 "新增客户"="zl_cxz",

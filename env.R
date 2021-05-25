@@ -8,22 +8,20 @@ env = list(
 				total=30,
 				# 按学历级别计分
 				score=list(
-					"大专以下"=10,
-					"大专非统招"=15,
-					"大专统招"=20,
-					"本科及以上非统招"=25,
-					"本科及以上统招"=30
+					"ed1"=10,# 高中、中专、初中及以下
+					"ed2"=20,# 专科
+					"ed3"=30 # 本科 、研究生
 					)	
 				),
 			# 特长
-			hobby=list(total=5,score=5),
+			# hobby=list(total=5,score=5),
 			# 政治背景
 			political=list(
-				total=10,
+				total=15,
 				# 退伍军人、党员
 				score=list(
 					party=5,
-					veteran=5
+					veteran=10
 					)
 				)
 
@@ -33,7 +31,7 @@ env = list(
 			total=50,
 			# 在岗时间（月）
 			score=list(
-				method="transform",
+				method="logit",
 				simple=1,
 				transform=50
 				)
@@ -41,23 +39,23 @@ env = list(
 			),
 		# 执业认证
 		qualification=list(
-			total=10,
+			total=30,
 			# 获得的经纪人证和协理证，多本证书以最高级别记分
 			score=list(
-				"杭州经纪人证"=5,
-				"全国协理证"=8,
-				"全国经纪人资格证"=10	
+				"q1"=10,#杭州经纪人资格证
+				"q2"=20,#全国经纪人协理证
+				"q3"=30	#全国经纪人资格证
 				)
 			),
 		# 每日一考
 		exam=list(
-			total=20,
+			total=15,
 			# 每日一考分
 			score=list(
-				"96~100分"=20,
-				"91~95分"=10,
-				"80-90分"=0,
-				"80分以下（不含）"=-10
+				"e1"=15,#96~100分
+				"e2"=10, #91~95分
+				"e3"=0, #80-90分
+				"e4"=-10 #80分以下（不含）
 				)
 
 			)
@@ -69,14 +67,14 @@ env = list(
 		daily = list(
 			total=40,
 			score=list(
-				"迟到早退"=-2,
-				"会议/培训迟到早退"=-5,
-				"旷工（含会议/培训缺勤）"=-10,
-				"6S（当事人违规违纪行为）"=-10,
-				"交通违法（骑电瓶闯红灯）"=-10,
-				"参与赌博"=-10,
-				"聚众闹事"=-20,
-				"其他"=0
+				"d1"=-1, #迟到早退
+				"d2"=-2, #会议/培训迟到早退
+				"d3"=-5, #旷工（含会议/培训缺勤）
+				"d4"=-10, #6S（当事人违规违纪行为）
+				"d5"=-10, #交通违法（骑电瓶闯红灯）
+				"d6"=-20, #参与赌博
+				"d7"=-20, #聚众闹事
+				"d0"=0 # 其他
 				),
 			# 每月回血
 			recovery=2
@@ -85,9 +83,9 @@ env = list(
 		punish=list(
 			total=60,
 			score=list(
-				"通报批评"=-10,
-				"警告处分"=-15,
-				"严重警告处分"=-20
+				"p1"=-10, #通报批评
+				"p2"=-15, #警告处分
+				"p3"=-20 #严重警告处分
 				),
 			# 每月回血
 			recovery=2			
@@ -101,36 +99,42 @@ env = list(
 		complaint=list(
 			total=80,
 			score=list(
-				"一级"=-5,
-				"二级"=-8,
-				"三级"=-10,
-				"四级"=-15,
-				"五级"=-20
+				"c1"=-6, #一级
+				"c2"=-8, #二级
+				"c3"=-10,#三级
+				"c4"=-15,#四级
+				"c5"=-20 #五级
 				),
 			# 每月回血
 			recovery=2	
 			),
+
 		# 客户评价
 		praise=list(
 			total=20,
 			score=list(
-				"通报表扬+奖励"=20,
-				"表扬"=10
+				"p1"=20,#通报表扬+奖励
+				"p2"=15 #表扬
 				),
 			cal=list(
 				attenuation=6,
-				coef=c(1,0.8,0.5,0.2,0.2,0.1)
+				coef=c(1,1,1,1,1,1)
 				)
 			),
+
 		# NPS值
 		nps=list(
-			total=20,
-			score=list(
-				"100%"=20,
-				"平均值上"=10,
-				"正分值且在平均分下"=5,
-				"负分值"=-2,
-				"other"=0
+			total=25,
+			method="rank",
+			score=10	,
+			cal=list(
+				attenuation=6,
+				coef=c(1,0.6,0.4,0.2,0.2,0.1)
+				),
+			# 参数设置
+			para=list(
+				alpha=1,
+				beta=8
 				)
 
 			),
@@ -138,9 +142,9 @@ env = list(
 		jingyan=list(
 			total=60,
 			score=list(
-				"买卖成交单数(二手+一手)"=0.5,
-				"租赁成交单"=0.1,
-				"租赁一手成交单"=0.5
+				"mm12"=0.5, #买卖成交单数(二手+一手)
+				"zl"=0.1, #租赁成交单
+				"zl1"=0.5 #租赁一手成交单
 				)
 			)
 		),
@@ -151,22 +155,28 @@ env = list(
 		xiaoqu =list(
 			total=10,
 			# 得分权重
-			score=list(
-				limit=10,
-				score=2
-				),
+			score=5,
 			# 计算方法
 			cal=list(
 				attenuation=6,
-				coef=c(1,0.8,0.5,0.3,0.2,0.2)
+				coef=c(1,0.5,0.2,0.1,0.1,0.1)
+				),
+			# 参数设置
+			para=list(
+				alpha=2,
+				y_alpha=0.6,
+				beta=5,
+				y_beta=0.9
 				)
+
 			),
 		# 师徒带训
 		teacher=list(
 			total=30,
 			score=list(
 				zaizhi=5,
-				zhuanzheng=8
+				zhuanzheng=8,
+				limit=30
 				),
 			cal=list(
 				attenuation=6,
@@ -209,8 +219,8 @@ env = list(
 		gw=list(
 			# 渗透量
 			app_download=list(
-				total=35,
-				method="transform",
+				total=45,
+				method="rank",
 				score=list(limit=10),
 				cal=list(
 					attenuation=6,
@@ -227,7 +237,7 @@ env = list(
 			# 400接通率
 			call_answer=list(
 				total=10,
-				method="transform",
+				method="rank",
 				score=list(limit=5),
 				cal=list(
 					attenuation=6,
@@ -242,7 +252,7 @@ env = list(
 			# 爱聊1分钟回复
 			al_1min=list(
 				total=45,
-				method="transform",
+				method="rank",
 				score=list(limit=15),
 				cal=list(
 					attenuation=6,
@@ -257,7 +267,7 @@ env = list(
 			# 爱聊三日复聊率
 			al_3day=list(
 				total=15,
-				method="transform",
+				method="rank",
 				score=list(limit=5),
 				cal=list(
 					attenuation=6,
@@ -272,7 +282,7 @@ env = list(
 			# 爱聊转录入率
 			al_luru=list(
 				total=45,
-				method="transform",
+				method="rank",
 				score=list(limit=15),
 				cal=list(
 					attenuation=6,
@@ -288,7 +298,7 @@ env = list(
 			# 爱聊转带看率
 			al_daikan=list(
 				total=15,
-				method="transform",
+				method="rank",
 				score=list(limit=5),
 				cal=list(
 					attenuation=6,
@@ -305,31 +315,32 @@ env = list(
 			),
 		# 买卖
 		mm=list(
-			# 成交单数
-			deal = list(
-				total=90,
-				method="transform",
-				score=list(
-					mm_2=6,
-					mm_1=8,
-					limit=90
-					),
-				cal=list(
-					attenuation=6,
-					coef=c(1,1,1,1,1,1)
-					),
-				# 参数设置
-				para=list(
-					alpha=3,
-					y_alpha=0.6,
-					beta=10,
-					y_beta=0.9
-					)
-				),
-			# 速销
-			mm_sx = list(
+			# 成交单数 -暂不考核
+			# deal = list(
+			# 	total=90,
+			# 	method="transform",
+			# 	score=list(
+			# 		mm_2=6,
+			# 		mm_1=8,
+			# 		limit=90
+			# 		),
+			# 	cal=list(
+			# 		attenuation=6,
+			# 		coef=c(1,1,1,1,1,1)
+			# 		),
+			# 	# 参数设置
+			# 	para=list(
+			# 		alpha=3,
+			# 		y_alpha=0.6,
+			# 		beta=10,
+			# 		y_beta=0.9
+			# 		)
+			# 	),
+
+			# 速销(收)
+			mm_s_sx = list(
 				total=20,
-				method="transform",
+				method="linear",
 				score=list(
 					limit=20,
 					score=6
@@ -340,41 +351,67 @@ env = list(
 					),
 				# 参数设置
 				para=list(
-					alpha=1,
-					y_alpha=0.5,
-					beta=2,
-					y_beta=0.8
+					a=6
 					)
 				),
+			# 速销(出)			
+			mm_c_sx = list(
+				total=25,
+				method="linear",
+				score=list(
+					limit=25,
+					score=8
+					),
+				cal=list(
+					attenuation=6,
+					coef=c(1,1,1,1,1,1)
+					),
+				# 参数设置
+				para=list(
+					a=8
+					)
+				),
+
+			# 转介客源		
+			mm_zjky = list(
+				total=20,
+				method="linear",
+				score=list(
+					limit=20,
+					score=8
+					),
+				cal=list(
+					attenuation=6,
+					coef=c(1,1,1,1,1,1)
+					),
+				# 参数设置
+				para=list(
+					a=8
+					)
+				),
+
 			# 折扣率
 			mm_zk = list(
-				total=20,
-				method="transform",
-				score=list(
-					limit=20,
-					score=6
-					),
+				total=30,
+				method="grow",
+				score=list(limit=10),
 				cal=list(
 					attenuation=6,
-					coef=c(1,1,1,1,1,1)
+					coef=c(1,0.8,0.5,0.3,0.2,0.2)
 					),
 				# 参数设置
 				para=list(
-					alpha=1,
+					alpha=2,
 					y_alpha=0.6,
-					beta=2,
+					beta=4,
 					y_beta=0.9
 					)
 				),
-			# 首看客户
-			mm_csk = list(
+			# 新增客户
+			mm_cxz = list(
 				total=10,
-				method="transform",
-				score=list(
-					kpi=5,
-					score=5,
-					limit=5
-					),
+				method="grow",
+				score=list(limit=5),
 				cal=list(
 					attenuation=6,
 					coef=c(1,0.5,0.2,0.1,0.1,0.1)
@@ -382,21 +419,16 @@ env = list(
 				# 参数设置
 				para=list(
 					alpha=5,
-					y_alpha=0.7,
-					beta=8,
+					y_alpha=0.6,
+					beta=12,
 					y_beta=0.9
 					)
-
 				),
 			# 总带看客户组数
 			mm_cdk = list(
-				total=10,
-				method="transform",
-				score=list(
-					kpi=14,
-					score=5,
-					limit=5
-					),
+				total=20,
+				method="grow",
+				score=list(limit=10),
 				cal=list(
 					attenuation=6,
 					coef=c(1,0.5,0.2,0.1,0.1,0.1)
@@ -404,8 +436,8 @@ env = list(
 				# 参数设置
 				para=list(
 					alpha=12,
-					y_alpha=0.7,
-					beta=30,
+					y_alpha=0.6,
+					beta=24,
 					y_beta=0.9
 					)
 
@@ -413,8 +445,8 @@ env = list(
 			# 房源新增
 			mm_fxz=list(
 				total=10,
-				method="transform",
-				score=5,
+				method="grow",
+				score=list(limit=5),
 				cal=list(
 					attenuation=6,
 					coef=c(1,0.5,0.2,0.1,0.1,0.1)
@@ -430,8 +462,8 @@ env = list(
 			# 认证委托
 			mm_wt=list(
 				total=20,
-				method="transform",
-				score=10,
+				method="grow",
+				score=list(limit=10),
 				cal=list(
 					attenuation=6,
 					coef=c(1,0.5,0.2,0.1,0.1,0.1)
@@ -448,10 +480,84 @@ env = list(
 			# 收钥匙
 			mm_ys=list(
 				total=10,
-				method="transform",
-				score=list(
-					score=5,
-					limit=10),
+				method="grow",
+				score=list(limit=5),
+				cal=list(
+					attenuation=6,
+					coef=c(1,0.5,0.2,0.1,0.1,0.1)
+					),
+				# 参数设置
+				para=list(
+					alpha=1,
+					y_alpha=0.7,
+					beta=3,
+					y_beta=0.9
+					)
+				)
+
+			),
+		# 租赁
+		zl=list(
+			# 成交单数 - 暂不考核
+			# deal = list(
+			# 	total=60,
+			# 	method="grow",
+			# 	score=list(
+			# 		zl_0=1,
+			# 		zl_1=8
+			# 		),
+			# 	cal=list(
+			# 		attenuation=6,
+			# 		coef=c(1,1,1,1,1,1)
+			# 		),
+			# 	# 参数设置
+			# 	para=list(
+			# 		alpha=3,
+			# 		y_alpha=0.6,
+			# 		beta=10,
+			# 		y_beta=0.9
+			# 		)
+			# 	),
+			# 房管收房
+			zl_sfg=list(
+				total=30,
+				method="grow",
+				score=list(limit=10),
+				cal=list(
+					attenuation=6,
+					coef=c(1,0.8,0.5,0.3,0.2,0.2)
+					),
+				# 参数设置
+				para=list(
+					alpha=3,
+					y_alpha=0.6,
+					beta=6,
+					y_beta=0.9
+					)
+				),
+			# 房管出房 - 暂不考核
+			# zl_cfg=list(
+			# 	total=10,
+			# 	method="grow",
+			# 	score=5,
+			# 	cal=list(
+			# 		attenuation=6,
+			# 		coef=c(1,0.5,0.2,0.1,0.1,0.1)
+			# 		),
+			# 	# 参数设置
+			# 	para=list(
+			# 		alpha=4,
+			# 		y_alpha=0.6,
+			# 		beta=6,
+			# 		y_beta=0.9
+			# 		)
+			# 	),
+
+			# 我收他出/他收我出
+			zl_fhz=list(
+				total=20,
+				method="grow",
+				score=list(limit=10),
 				cal=list(
 					attenuation=6,
 					coef=c(1,0.5,0.2,0.1,0.1,0.1)
@@ -459,115 +565,74 @@ env = list(
 				# 参数设置
 				para=list(
 					alpha=2,
-					y_alpha=0.7,
-					beta=4,
-					y_beta=0.9
-					)
-
-				)
-
-			),
-		# 租赁
-		zl=list(
-			# 成交单数
-			deal = list(
-				total=60,
-				method="transform",
-				score=list(
-					zl_0=1,
-					zl_1=8
-					),
-				cal=list(
-					attenuation=6,
-					coef=c(1,1,1,1,1,1)
-					),
-				# 参数设置
-				para=list(
-					alpha=3,
 					y_alpha=0.6,
-					beta=10,
+					beta=5,
 					y_beta=0.9
 					)
 				),
-			# 房管收房
-			zl_sfg=list(
-				total=30,
-				method="transform",
-				score=10,
-				cal=list(
-					attenuation=6,
-					coef=c(1,0.8,0.5,0.3,0.2,0.2)
-					),
-				# 参数设置
-				para=list(
-					alpha=3,
-					y_alpha=0.6,
-					beta=6,
-					y_beta=0.9
-					)
-				),
-			# 房管出房
-			zl_cfg=list(
-				total=10,
-				method="transform",
-				score=5,
+
+			# 出着火房管
+			zl_czh=list(
+				total=20,
+				method="linear",
+				score=list(limit=10),
 				cal=list(
 					attenuation=6,
 					coef=c(1,0.5,0.2,0.1,0.1,0.1)
 					),
 				# 参数设置
-				para=list(
-					alpha=4,
-					y_alpha=0.6,
-					beta=6,
-					y_beta=0.9
-					)
+				para=list(a=5)
 				),
+
+
 			# 租赁在管量
 			zl_zg=list(
-				total=40,
-				score=40,
-				para=list(
-					alpha=35,
-					y_alpha=0.5,
-					beta=55,
-					y_beta=0.9
-					)								
+				total=30,
+				score=list(limit=30),
+				method="linear",
+				cal=list(
+					attenuation=1,
+					coef=c(1)
+					),	
+				# 参数设置				
+				para=list(a=0.4)								
 				),
+
 			# 租赁委托续签量
 			zl_wt=list(
-				total=20,
-				score=20,
+				total=15,
+				score=list(limit=15),
+				method="linear",
+				cal=list(
+					attenuation=1,
+					coef=c(1)
+					),					
 				# 参数设置
-				para=list(
-					alpha=1,
-					y_alpha=0.5,
-					beta=3,
-					y_beta=0.9
-					)					
+				para=list(a=2)					
 				),
+
 			# 租赁新增客户
 			zl_cxz=list(
 				total=30,
-				method="transform",
-				score=10	,
+				method="grow",
+				score=list(limit=10),
 				cal=list(
 					attenuation=6,
 					coef=c(1,0.8,0.5,0.3,0.2,0.2)
 					),
 				# 参数设置
 				para=list(
-					alpha=25,
+					alpha=20,
 					y_alpha=0.6,
-					beta=35,
+					beta=30,
 					y_beta=0.9
 					)
 				),
 			# 租赁房源新增
 			zl_fxz=list(
-				total=10,
-				method="transform",
-				score=5	,
+				total=20,
+				method="grow",
+				score=list(limit=10),
 				cal=list(
 					attenuation=6,
 					coef=c(1,0.5,0.2,0.1,0.1,0.1)
@@ -583,8 +648,8 @@ env = list(
 			# 租赁普租实勘
 			zl_pzsk=list(
 				total=10,
-				method="transform",
-				score=5	,
+				method="grow",
+				score=list(limit=5),
 				cal=list(
 					attenuation=6,
 					coef=c(1,0.5,0.2,0.1,0.1,0.1)

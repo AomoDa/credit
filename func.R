@@ -4,7 +4,7 @@ library(dplyr)
 
 
 #-------------------------------------------
-# 个人背景
+# 司龄
 #-------------------------------------------
 
 entry_transfrom <- function(x,t) {
@@ -29,15 +29,15 @@ entry_simple <- Vectorize(FUN=function(x,a) {
 
 simple_score_exam<- Vectorize(function(x,rule = env$base$exam){
 	if(is.na(x)){
-		return(rule$score$`80分以下（不含`)
+		return(rule$score$`e4`)
 	}else if(x >= 96){
-		return( rule$score$`96~100分`)
+		return( rule$score$`e1`)
 	}else if (x >= 91) {
-		return(rule$score$`91~95分`)
+		return(rule$score$`e2`)
 	}else if (x>=80){
-		return(rule$score$`80-90分`)
+		return(rule$score$`e3`)
 	}else {
-		return(rule$score$`80分以下（不含`)
+		return(rule$score$`e4`)
 	}
 },vectorize.args ="x")
 
@@ -62,6 +62,10 @@ simple_score_nps <- Vectorize(function(x,business,nps.tb,rule){
 	return(rule$score$`other`)	
 
 },vectorize.args =c("x","business"))
+
+
+
+
 
 
 #-------------------------------------------
@@ -213,8 +217,8 @@ get_grow_score_func <- function(rule){
 # 线性模型
 get_grow_score_linear_func <- function(rule) {
 	Vectorize(function(x) {
-		x1 = rule$score$score * x 
-		x2 = rule$score$limit
+		x1 = rule$para$a * x 
+		x2 = ifelse(is.numeric(rule$score),rule$score,rule$score$limit)
 		return(min(x1,x2))
 	})
 }
@@ -261,6 +265,7 @@ get_gw_lv_func <- function(rule){
 
 # 官网得分计算
 gw_score <- Vectorize(function(rk,rule) {
+	aa = ifelse(is.numeric(rule$score),rule$score,rule$score$limit)
 	# 排名0-1%（含）计 1
 	# 排名1%-5%（含）计0.9
 	# 排名5%-10%（含）计0.8
@@ -292,7 +297,7 @@ gw_score <- Vectorize(function(rk,rule) {
 	}else{
 		p = 0
 	}
-	return(p * rule$score$limit)
+	return(p * aa)
 },,vectorize.args="rk")
 
 # 官网计算方法

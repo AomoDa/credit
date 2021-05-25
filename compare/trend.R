@@ -3,7 +3,7 @@ dateList = unique(kpi.dat$date)
 mm_jjrList = unique(finalScore$name[finalScore$business=="mm"])
 zl_jjrList = unique(finalScore$name[finalScore$business=="zl"])
 # UI
-ana_comp_trend_UI <- function(id="credit", label = "请选择文件") {
+ana_comp_trend_UI <- function(id="credit_trend", label = "请选择文件") {
   ns <- NS(id)
   tabItem(tabName = "comp_trend",height=1200,
           h2("经纪人TOP榜单"),hr(),
@@ -43,8 +43,8 @@ ana_comp_trend_UI <- function(id="credit", label = "请选择文件") {
                 "业务能力-官网"="gw",
                 "业务能力-买卖"="mm"
                 ),selected="信用分"),
-              selectInput(inputId=ns("plot_comp_grow_date_select_mm"),label="请选择经纪人",
-                choices=mm_jjrList,selected= mm_jjrList[1:3],multiple=TRUE,selectize=3) 
+              selectizeInput(inputId=ns("plot_comp_grow_date_select_mm"),label="请选择经纪人",
+                choices=NULL,multiple=TRUE,options = list(maxOptions = 20)) 
           ),
           box(
               title = "经纪人信用分分布情况", solidHeader = TRUE,width=10,height=500,       
@@ -62,8 +62,8 @@ ana_comp_trend_UI <- function(id="credit", label = "请选择文件") {
                 "业务能力-官网"="gw",
                 "业务能力-租赁"="zl"
                 ),selected="信用分"),
-              selectInput(inputId=ns("plot_comp_grow_date_select_zl"),label="请选择经纪人",
-                choices=zl_jjrList,selected= zl_jjrList[1:3],multiple=TRUE,selectize=3) 
+              selectizeInput(inputId=ns("plot_comp_grow_date_select_zl"),label="请选择经纪人",
+                choices=NULL,multiple=TRUE,options = list(maxOptions = 20)) 
           ),
           box(
               title = "经纪人信用分分布情况", solidHeader = TRUE,width=10,height=500,       
@@ -74,10 +74,22 @@ ana_comp_trend_UI <- function(id="credit", label = "请选择文件") {
 
 
 # Server
-ana_comp_trend_Server <- function(id="credit") {
+ana_comp_trend_Server <- function(id="credit_trend") {
   moduleServer(
     id,
     function(input, output, session) {
+
+
+  updateSelectizeInput(session, 'plot_comp_grow_date_select_mm', 
+    choices = mm_jjrList, server = TRUE,
+    selected=mm_jjrList[1:3]) 
+
+    updateSelectizeInput(session, 'plot_comp_grow_date_select_zl', 
+    choices = zl_jjrList, server = TRUE,
+    selected=zl_jjrList[1:3]) 
+
+
+
 
     output$plot_top_mm_jjr <- renderPlotly(
       top_credit(var=input$plot_comp_top_var_select,

@@ -7,7 +7,7 @@ ana_base_UI <- function(id="credit_base", label = "请选择文件") {
               title = "经纪人信用分分布情况", solidHeader = TRUE,width=6,height=500,
               selectInput(inputId=ns("plot_base2_var_select"),label="请选择分析变量",choices=list(
                 "教育背景"="education",
-                "特长"="hobby",
+                # "特长"="hobby",
                 "政治背景"="political",
                 "司龄"="entry",
                 "执业认证"="qualification",

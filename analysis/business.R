@@ -10,15 +10,16 @@ ana_business_UI <- function(id="credit_mm_zl", label = "请选择文件") {
           box(
               title = "经纪人信用分分布情况", solidHeader = TRUE,width=6,height=500,
               selectInput(inputId=ns("plot_mm_var_select"),label="请选择分析变量",choices=list(
-                "买卖成交"="mm_deal",
-                "速销"="mm_sx",
+                "收-速销房"="mm_s_sx",
+                "出-速销房"="mm_c_sx",
+                "转介客源"="mm_zjky",
                 "折扣率"="mm_zk",
-                "客户首看"="mm_csk",
+                "客户新增"="mm_cxz",
                 "客户带看组数"="mm_cdk",
                 "房源新增"="mm_fxz",
                 "认证委托"="mm_wt",
                 "钥匙"="mm_ys"
-                ),selected="mm_deal"),
+                ),selected="mm_s_sx"),
               selectInput(inputId=ns("plot_mm_date_select"),label="请选择计算日期",
                 choices=dateList,selected= rev(dateList)[1]) ,         
               selectInput(inputId=ns("plot_mm_business_select"),label="请选择业务类型",
@@ -53,15 +54,16 @@ ana_business_UI <- function(id="credit_mm_zl", label = "请选择文件") {
           box(
               title = "经纪人信用分分布情况", solidHeader = TRUE,width=6,height=500,
               selectInput(inputId=ns("plot_zl_var_select"),label="请选择分析变量",choices=list(
-                "租赁成交"="zl_deal",
                 "房管收房"="zl_sfg",
-                "房管出房"="zl_cfg",
+                # "房管出房"="zl_cfg",
+                "合作出房"="zl_fhz",
+                "出着火房"="zl_czh",
                 "在管量"="zl_zg",
                 "委托续签量"="zl_wt",
                 "新增客户"="zl_cxz",
                 "房源新增"="zl_fxz",
                 "普租实勘"="zl_pzsk"
-                ),selected="zl_deal"),
+                ),selected="zl_fhz"),
               selectInput(inputId=ns("plot_zl_date_select"),label="请选择计算日期",
                 choices=dateList,selected= rev(dateList)[1]) ,         
               selectInput(inputId=ns("plot_zl_business_select"),label="请选择业务类型",
