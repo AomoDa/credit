@@ -393,18 +393,19 @@ env = list(
 			# 折扣率
 			mm_zk = list(
 				total=30,
-				method="grow",
-				score=list(limit=10),
+				method="linear",
+				score=list(limit=30),
 				cal=list(
 					attenuation=6,
-					coef=c(1,0.8,0.5,0.3,0.2,0.2)
+					coef=c(1,1,1,1,1,1)
 					),
 				# 参数设置
 				para=list(
-					alpha=2,
-					y_alpha=0.6,
-					beta=4,
-					y_beta=0.9
+					a=6
+					# alpha=2,
+					# y_alpha=0.6,
+					# beta=4,
+					# y_beta=0.9
 					)
 				),
 			# 新增客户
