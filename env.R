@@ -521,18 +521,18 @@ env = list(
 			# 	),
 			# 房管收房
 			zl_sfg=list(
-				total=30,
+				total=40,
 				method="grow",
-				score=list(limit=10),
+				score=list(limit=15),
 				cal=list(
 					attenuation=6,
 					coef=c(1,0.8,0.5,0.3,0.2,0.2)
 					),
 				# 参数设置
 				para=list(
-					alpha=3,
+					alpha=2,
 					y_alpha=0.6,
-					beta=6,
+					beta=4,
 					y_beta=0.9
 					)
 				),
@@ -556,9 +556,9 @@ env = list(
 
 			# 我收他出/他收我出
 			zl_fhz=list(
-				total=20,
+				total=10,
 				method="grow",
-				score=list(limit=10),
+				score=list(limit=5),
 				cal=list(
 					attenuation=6,
 					coef=c(1,0.5,0.2,0.1,0.1,0.1)
@@ -588,8 +588,8 @@ env = list(
 
 			# 租赁在管量
 			zl_zg=list(
-				total=30,
-				score=list(limit=30),
+				total=20,
+				score=list(limit=20),
 				method="linear",
 				cal=list(
 					attenuation=1,
@@ -640,26 +640,26 @@ env = list(
 					),
 				# 参数设置
 				para=list(
-					alpha=3,
+					alpha=6,
 					y_alpha=0.6,
-					beta=6,
+					beta=10,
 					y_beta=0.9
 					)
 				),
 			# 租赁普租实勘
 			zl_pzsk=list(
-				total=10,
+				total=20,
 				method="grow",
-				score=list(limit=5),
+				score=list(limit=10),
 				cal=list(
 					attenuation=6,
 					coef=c(1,0.5,0.2,0.1,0.1,0.1)
 					),
 				# 参数设置
 				para=list(
-					alpha=3,
+					alpha=4,
 					y_alpha=0.6,
-					beta=6,
+					beta=7,
 					y_beta=0.9
 					)
 				)

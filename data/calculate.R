@@ -195,8 +195,8 @@ run <- function(kpi.dat,gg.dat,env) {
 }
 
 # # 计算
-# finalScore = run(kpi.dat,gg.dat,env)
-# write.csv(x = finalScore,file = "finalScore.csv",row.names =FALSE)
+finalScore = run(kpi.dat,gg.dat,env)
+write.csv(x = finalScore,file = "finalScore.csv",row.names =FALSE)
 finalScore = read.csv(file = "finalScore.csv",header = TRUE,stringsAsFactors = FALSE)
 finalScore$credit_date <- as.Date(finalScore$credit_date)
 
