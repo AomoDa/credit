@@ -618,15 +618,20 @@ credit_mm_zk <- function(dat,now_date,env){
 	credit_log(msg="买卖指标- 折扣",rule)	
 	# 提取计算周期 & 系数 
 	coef_dat=getCoefData(dat = dat,now_date = now_date,rule = rule)
-	# 得分方法 - 增长曲线
-	# sf = get_grow_score_func(rule)
-	# 得分方法 - 线性
-	sf = get_grow_score_linear_func(rule)
+	# 转换率方法
+	f = get_gw_lv_func(rule)
+	# 得分方法
+	sf = get_gw_score_func(rule)
+
 	dat %>% 
 		filter(date <= now_date) %>%
 		filter(date >= min(coef_dat$date)) %>%
-		select(date,id,mm_zk) %>%
-		mutate(s_mon = sf(mm_zk))%>%
+		select(date,id,mm_num_deal,mm_num_zk) %>%
+		mutate(lv=f(succ=mm_num_zk,n=mm_num_deal))	%>%
+		group_by(date) %>%
+		mutate(rk = percent_rank(-lv))  %>%
+		ungroup() %>%
+		mutate(s_mon = sf(rk)) %>%
 		inner_join(coef_dat,by="date")  %>%
 		group_by(id) %>%
 		summarise(s=sum(s_mon*coef)) %>%
@@ -634,6 +639,8 @@ credit_mm_zk <- function(dat,now_date,env){
 		as.data.frame()	
 
 }
+
+
 
 # # 首看客户 - 增长公式
 # credit_mm_csk <- function(dat,now_date,env) {

@@ -20,8 +20,8 @@ env = list(
 				total=15,
 				# 退伍军人、党员
 				score=list(
-					party=5,
-					veteran=10
+					party=10,
+					veteran=15
 					)
 				)
 
@@ -52,9 +52,9 @@ env = list(
 			total=15,
 			# 每日一考分
 			score=list(
-				"e1"=15,#96~100分
-				"e2"=10, #91~95分
-				"e3"=0, #80-90分
+				"e1"=20,# >=95
+				"e2"=10, # >=90
+				"e3"=0, # >=80
 				"e4"=-10 #80分以下（不含）
 				)
 
@@ -67,14 +67,13 @@ env = list(
 		daily = list(
 			total=40,
 			score=list(
-				"d1"=-1, #迟到早退
-				"d2"=-2, #会议/培训迟到早退
+				"d1"=-2, #迟到早退、#会议/培训迟到早退
 				"d3"=-5, #旷工（含会议/培训缺勤）
 				"d4"=-10, #6S（当事人违规违纪行为）
 				"d5"=-10, #交通违法（骑电瓶闯红灯）
 				"d6"=-20, #参与赌博
 				"d7"=-20, #聚众闹事
-				"d0"=0 # 其他
+				"d0"=-5 # 其他
 				),
 			# 每月回血
 			recovery=2
@@ -393,19 +392,16 @@ env = list(
 			# 折扣率
 			mm_zk = list(
 				total=30,
-				method="linear",
-				score=list(limit=30),
+				method="transform",
+				score=list(limit=10),
 				cal=list(
 					attenuation=6,
-					coef=c(1,1,1,1,1,1)
+					coef=c(1,0.8,0.5,0.3,0.2,0.2)
 					),
 				# 参数设置
 				para=list(
-					a=6
-					# alpha=2,
-					# y_alpha=0.6,
-					# beta=4,
-					# y_beta=0.9
+					alpha=3,
+					beta=5
 					)
 				),
 			# 新增客户

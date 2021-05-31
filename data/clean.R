@@ -5,7 +5,7 @@ library(stringr)
 
 # setwd("Documents/credit/")
 # jjrDataPath = "data/积分系统测试所需员工数据5.1.xlsx"
-jjrDataPath="data/data0521.xlsx"
+jjrDataPath="data/data0531.xlsx"
 ggDataPath="data/gg0521.xlsx"
 #----------------------------------------------------------------
 # 经纪人过程指标数据
@@ -19,7 +19,7 @@ shtFormat <- function(sht){
 
 # 读取单个SHEET
 readSheet <- function(sht) {
-	dat = read_xlsx(path = jjrDataPath,sheet = sht,na="无",col_types=c(rep("guess",8),rep("text",45)))
+	dat = read_xlsx(path = jjrDataPath,sheet = sht,na="无",col_types=c(rep("guess",8),rep("text",47)))
 	names(dat) <- c(
 					# 大区	区域	店组	岗位	姓名	职级	ERP编号	入职日期
 					"daqu","qu","zu","job","name","level","id","entry_date",
@@ -39,8 +39,8 @@ readSheet <- function(sht) {
 					"dcnt_al_3","dcnt_al_daikan","al_daikan",
 					# 小区楼盘纠错
 					# "xiaoqu",
-					# 买卖收速销房	买卖出速销房	转介客源（暂无数据）	买卖折扣达标量
-					"mm_s_sx","mm_c_sx","mm_zjky","mm_zk",
+					# 买卖收速销房	买卖出速销房	转介客源 成交单数	买卖折扣达标量 买卖折扣达标量
+					"mm_s_sx","mm_c_sx","mm_zjky","mm_num_deal","mm_num_zk","mm_zk",
 					# 买卖新增客户	买卖总带看客户组数	 买卖房源新增	买卖认证委托量	买卖收钥匙量
 					"mm_cxz","mm_cdk","mm_fxz","mm_wt","mm_ys",
 					# 租赁房管收房	我收他出+他收我出,出着火房管
@@ -52,7 +52,7 @@ readSheet <- function(sht) {
 	dat$entry_date <- as.Date(dat$entry_date)
 	dat$id <- as.numeric(dat$id)
 	dat$entry_month <- as.numeric(dat$entry_month)
-	dat[,c(13:53)] <- as.data.frame(apply(X = dat[,c(13:53)],MARGIN = 2,FUN = as.numeric))
+	dat[,c(13:55)] <- as.data.frame(apply(X = dat[,c(13:55)],MARGIN = 2,FUN = as.numeric))
 	dat$date <- shtFormat(sht)
 	# 删除错误数据
 	entry_date_num <- as.numeric(substr(dat$entry_date,1,4)) * 12 + as.numeric(substr(dat$entry_date,6,7)) 
@@ -86,7 +86,7 @@ fill <- function(vec,default=0){
 
 #读取数据
 # kpi.dat = readData()
-# kpi.dat[13:53] <- as.data.frame( apply(X = kpi.dat[13:53],MARGIN = 2,FUN = fill))
+# kpi.dat[13:55] <- as.data.frame( apply(X = kpi.dat[13:55],MARGIN = 2,FUN = fill))
 # kpi.dat$business = ifelse(str_count(kpi.dat$qu,pattern = "A"),"zl","mm")
 # write.csv(x = kpi.dat,file = "kpi.csv",row.names = FALSE)
 
