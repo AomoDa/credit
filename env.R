@@ -401,7 +401,7 @@ env = list(
 				# 参数设置
 				para=list(
 					alpha=3,
-					beta=5
+					beta=7
 					)
 				),
 			# 新增客户

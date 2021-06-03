@@ -171,6 +171,48 @@ get_gw_score_func <- function(rule) {
 
 
 
+# 折扣率计算分数
+mm_zk_score <- Vectorize(function(rk,rule) {
+	aa = ifelse(is.numeric(rule$score),rule$score,rule$score$limit)
+	# 排名0-1%（含）计 1
+	# 排名1%-5%（含）计0.9
+	# 排名5%-10%（含）计0.8
+	# 排名10%-20%（含）计0.7
+	# 排名20%-30%（含）计0.6
+	# 排名30%-40%（含）计0.5
+	# 排名40%-50%（含）计0.4
+	# 排名50-60%（含）计0.2
+	# 排名60%-80% （含）计0.1
+	# 排名前80%-100%（含）计0分
+	if(rk <= 0.01){
+		p =1 
+	}else if (rk <=0.05){
+		p = 0.9
+	}else if (rk <= 0.1){
+		p = 0.8
+	}else if (rk <= 0.2){
+		p = 0.7
+	}else if (rk <= 0.3){
+		p = 0.5
+	}else if (rk <= 0.4){
+		p = 0.4
+	}else if (rk <= 0.5){
+		p = 0.2
+	}else if (rk <= 0.6){
+		p = 0.1
+	}else if (rk <= 0.8){
+		p = 0
+	}else{
+		p = 0
+	}
+	return(p * aa)
+},,vectorize.args="rk")
+
+# 官网计算方法
+get_zk_score_func <- function(rule) {
+	function(rk) mm_zk_score(rk,rule=rule)
+}
+
 
 
 

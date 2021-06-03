@@ -621,7 +621,7 @@ credit_mm_zk <- function(dat,now_date,env){
 	# 转换率方法
 	f = get_gw_lv_func(rule)
 	# 得分方法
-	sf = get_gw_score_func(rule)
+	sf = get_zk_score_func(rule)
 
 	dat %>% 
 		filter(date <= now_date) %>%

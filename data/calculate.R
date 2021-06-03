@@ -194,7 +194,7 @@ run <- function(kpi.dat,gg.dat,env) {
 	return(rlt)
 }
 
-# # 计算
+# 计算
 # finalScore = run(kpi.dat,gg.dat,env)
 # write.csv(x = finalScore,file = "finalScore.csv",row.names =FALSE)
 finalScore = read.csv(file = "finalScore.csv",header = TRUE,stringsAsFactors = FALSE)
